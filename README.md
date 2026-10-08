@@ -35,6 +35,10 @@ El archivo `src/routing/direct.ts` exporta `findDirectItineraries(dataset, { cit
 
 La interfaz está en `App.tsx`, con los selectores del catálogo en `src/components/CatalogPicker.tsx`. Al calcular, muestra el sentido del servicio, la parada de abordaje y la de descenso; cuando el viaje no está documentado, explica la limitación. Por ahora, el mapa utiliza únicamente el catálogo local y encuadra las paradas elegidas; dibuja una línea solo cuando el viaje corresponde a un patrón completo que ya tiene geometría documentada. No dibuja una ruta inexistente entre paradas ni presenta el esquema como un mapa de calles.
 
+## Consulta por fecha en desarrollo
+
+La interfaz permite alternar entre **comprobar la conectividad de un recorrido directo** y **consultar programación por fecha**. El segundo modo usa únicamente un calendario **ficticio**, con dos variantes de prueba, una fecha elegida manualmente y resultados cuya salida y llegada se identifican como **aproximadas, no en tiempo real**. El catálogo de Bogotá recibido para auditoría **no está incorporado a la aplicación** y permanece fuera de este repositorio público mientras se aclara su licencia concreta. La [decisión sobre licencia y vigencia](docs/bogota-license-and-service-decision.md) y las [pruebas Android pendientes](docs/testing-android.md) registran los límites de este incremento.
+
 ## Compilar para Android
 
 El proyecto utiliza **EAS Build** para producir una APK que se pueda instalar y abrir en un teléfono sin mantener el computador conectado. Hace falta una cuenta de Expo con acceso al proyecto; la configuración de EAS ya está asociada a este repositorio.
