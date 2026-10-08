@@ -8,6 +8,16 @@
 - No activar planes de pago, credenciales de proveedores de mapas facturables ni servicios de terceros sin aprobación explícita del propietario.
 - Propuesta: aproximadamente un build Android por incremento estable, no por commit. Las pruebas TypeScript/datos sí se ejecutan por push y PR.
 
+## Visibilidad del repositorio y control de gasto
+
+**Decisión provisional: repositorio público.** El código fuente es visible para cualquier persona, pero GitHub Actions en runners estándar no consume minutos facturables del plan por ejecutarse en un repositorio público. Los secretos de Actions, como `EXPO_TOKEN`, no se escriben en archivos ni en el historial Git. El carácter público **no genera un cobro por sí solo**.
+
+Cambiar a privado es posible más adelante desde Settings → General → Danger Zone → Change repository visibility. En un repositorio privado, los jobs de Actions usan las cuotas de minutos/almacenamiento del plan; GitHub puede facturar el exceso si existe un método de pago y gasto permitido. Sin un método de pago válido, el uso se bloquea al agotar la cuota gratuita. Antes de hacer privado el repositorio, revisar Billing, establecer límites de gasto y, si corresponde, ajustar la frecuencia de CI.
+
+El plan Free de Expo/EAS es independiente de la visibilidad de GitHub. Ningún token es una moneda o crédito de facturación, pero debe tratarse como una contraseña.
+
+Referencias: https://docs.github.com/en/billing/concepts/product-billing/github-actions y https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility.
+
 ## Automatización disponible
 
 1. [CI](../.github/workflows/ci.yml): `push` a `main`, `pull_request` a `main` y `workflow_dispatch` ejecutan `npm ci`, validación dataset, tests del validador, tests de rutas, `tsc` y Expo Doctor.
