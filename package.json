@@ -20,7 +20,9 @@
     "verify:bogota-pilot": "node --experimental-strip-types scripts/verify-bogota-pilot.mjs",
     "test:bogota-handoff": "node --experimental-strip-types scripts/test-bogota-handoff.mjs",
     "test:catalog-notice": "node --experimental-strip-types scripts/test-catalog-notice.mjs",
-    "test:gtfs-calendar": "node --experimental-strip-types scripts/test-gtfs-calendar.mjs"
+    "test:gtfs-calendar": "node --experimental-strip-types scripts/test-gtfs-calendar.mjs",
+    "test:scheduled": "node --experimental-strip-types scripts/test-scheduled.mjs",
+    "verify:private-temporal": "node --experimental-strip-types scripts/verify-private-temporal.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
