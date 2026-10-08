@@ -125,7 +125,7 @@ export function ScheduledTripPanel({
           {statusMessages[result.status]}
         </Text>
       )}
-      {result === null && schedule !== null && (
+      {result === null && schedule !== null && date !== null && (
         <Text style={styles.message}>
           Selecciona origen y destino; luego consulta una fecha cubierta por el catálogo.
         </Text>
