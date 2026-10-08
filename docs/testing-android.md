@@ -1,11 +1,13 @@
 # Prueba física Android — siguiente APK de integración (pendiente)
 
-Esta lista se ejecutará **solo después de agrupar cambios útiles** en interfaz, mapa y primer conjunto de datos verificado, o antes si CI detecta un riesgo nativo que no podamos resolver sin dispositivo. La APK inicial no verifica el estado actual del código.
+Esta lista se ejecutará después de agrupar los cambios de interfaz, selección por fecha y mapa; **no requiere cargar ni distribuir GTFS real**. La primera APK instalada no verifica el estado actual. La próxima compilación será de integración con un catálogo enteramente ficticio, sin publicación en Google Play.
 
 ## Preparación
 
 - Revisión de `main` y GitHub Actions con tests/TypeScript/Expo Doctor en verde.
-- APK autónoma desde perfil EAS `preview` (`npm run build:apk` o workflow manual). No usar Expo Go.
+- APK autónoma desde perfil EAS `preview` (`npm run build:apk` o workflow manual), **solo después de autorizar la prueba**. No usar Expo Go.
+- Ejecutar `npm run check:preview-data` y `npm run test:preview-data` para confirmar que solo se empaquetarán datos ficticios. `npm run build:apk` ejecutará preflight automáticamente mediante `prebuild:apk`; el workflow manual tiene el mismo bloqueo.
+- No copiar el ZIP GTFS ni sus archivos a la carpeta del proyecto o al contexto de compilación.
 - Registrar fecha, marca/modelo, versión Android, ID del build EAS, commit y `datasetVersion`.
 - Antes de aprobar un viaje real, debe existir lote Bogotá revisado conforme a `docs/bogota-pilot-handoff.md`.
 
@@ -22,14 +24,15 @@ Esta lista se ejecutará **solo después de agrupar cambios útiles** en interfa
 ## Consulta por fecha (fixture ficticio, pendiente de Android)
 
 - [ ] Alternar entre **Recorrido directo** y **Por fecha de servicio** sin mostrar resultados del modo anterior.
-- [ ] Elegir DEV Alfa → DEV Beta y fecha `2026-10-12`: la muestra debe ofrecer las **dos variantes ficticias**, ordenadas por hora programada de abordaje; todas las horas se presentan como **aproximadas**, nunca tiempo real.
+- [ ] Elegir DEV Alfa → DEV Beta y fecha `2026-10-12`: deben aparecer **dos opciones ficticias diferenciadas**, cada una con su parada de abordaje, salida y llegada programadas aproximadas.
 - [ ] Elegir DEV Alfa → DEV Gamma el mismo día: solo la **variante larga** ficticia atiende ese destino.
 - [ ] Cambiar a `2026-10-19`: la variante de servicio especial desaparece y se conserva solo la programada para día ordinario dentro del fixture.
 - [ ] Elegir fecha fuera del intervalo `2026-10-01` a `2026-10-31`: debe informar falta de cobertura temporal, no ausencia de buses.
-- [ ] Probar `2026-02-30` (fecha inválida) y un formato distinto de `AAAA-MM-DD`: no debe aparecer un viaje.
-- [ ] Cambiar origen, destino o el modo después de calcular; no deben persistir resultados anteriores.
+- [ ] Probar `2026-02-30` (fecha inválida), `2025-02-29` (no bisiesto) y un formato distinto de `AAAA-MM-DD`: debe aparecer un aviso de fecha inválida y deshabilitarse la consulta.
+- [ ] Cambiar origen, destino o el modo después de calcular; no deben persistir resultados anteriores. Al cambiar solo una parada, se conserva la fecha elegida.
 - [ ] Repetir todas las consultas sin conexión, tras cerrar completamente la app y abrirla en modo avión.
 - [ ] Comprobar que el mapa esquemático no invente el trayecto de la variante corta ni líneas callejeras.
+- [ ] En pantalla pequeña (altura inferior a ~700 puntos), la app debe iniciar con mapa oculto para priorizar controles; tocar «Mostrar mapa» y verificar su arrastre y zoom. La selección y la consulta por fecha deben seguir accesibles.
 
 **No usar estos casos como comprobación de recorridos reales de Bogotá**: las fechas y horas de la interfaz pertenecen a un fixture sintético y están señalizadas como tales.
 
