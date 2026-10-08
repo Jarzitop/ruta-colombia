@@ -75,3 +75,15 @@ El verificador no necesita tokens, servidor ni API. No ejecutar `git add -f` sob
 ### Aún bloqueado
 
 El catálogo de 14 paradas sigue estático y la pantalla **no se ha conectado** al motor por fecha. Para activar orientación de pasajeros faltan resolver la reutilización del ZIP específico, la integración validada de ambas variantes y la fecha/hora de servicio, los límites de horarios interpolados, la atribución y la comprobación presencial en Bogotá. El mensaje de licencia sigue siendo **ámbito pendiente de aclaración**, no prohibición demostrada.
+
+### Verificación privada ejecutada por Construcción — 8 de octubre de 2026
+
+Se **ejecutó realmente**, fuera de GitHub, el verificador `scripts/verify-private-temporal.mjs` del repositorio contra `temporal.json` y `expected-temporal-cases.json` del ZIP actualizado. Para garantizar que la prueba utilizaba el código versionado, se reconstruyeron y comprobaron los SHA Git exactos de `src/gtfs/calendar.ts`, `src/gtfs/scheduled.ts` y `scripts/verify-private-temporal.mjs` antes de la ejecución. Tras un endurecimiento del validador de horas, se comprobó igualmente el SHA exacto del módulo corregido.
+
+**Resultado:** 709 viajes, 9.773 eventos y **16/16 regresiones temporales**, correctos. El catálogo temporal superó `validateScheduledCatalog`. Se comprobaron además consultas por fecha y destino: el festivo del 12 de octubre retorna 150 viajes al terminal largo y 303 hasta el terminal compartido con la variante corta (153 cortos). El motor no propone el servicio en sentido inverso ni fuera del intervalo declarado del feed.
+
+Una prueba negativa encontró que una hora de texto incorrecta acompañada por `arrivalSeconds: null` no se bloqueaba. Se corrigió `src/gtfs/scheduled.ts` para exigir horas GTFS parseables y valores de segundos enteros y seguros tanto en llegada como en salida; el verificador volvió a aprobar las 16 regresiones con el módulo modificado, y ambas mutaciones con valores `null` ahora son rechazadas. Se incorporaron 3 tests sintéticos de regresión al CI.
+
+**Precisión del alcance:** ninguna de estas comprobaciones valida el cumplimiento de licencia, exactitud física de las paradas, disponibilidad en tiempo real ni los horarios interpolados como predicciones. El ZIP y los JSON reales permanecen fuera del repositorio público y fuera de la APK. El archivo `src/data/active.ts` todavía selecciona el fixture ficticio.
+
+Sigue pendiente confirmar derechos de reutilización y definir un flujo temporal seguro para la interfaz que muestre fecha local, variantes y horarios expresamente **aproximados**; no basta con marcar `publishable: true`.
