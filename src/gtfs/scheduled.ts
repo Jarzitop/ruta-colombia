@@ -124,9 +124,7 @@ export function validateScheduledCatalog(catalog: ScheduledCatalog): string[] {
   if (catalog?.auditSchemaVersion !== '1.0.0' ||
       !catalog.catalogDatasetVersion ||
       !catalog.timezone ||
-      catalog.scope !== 'route_id 11231 only; scheduled data, not live availability' &&
-        !catalog.scope?.startsWith('synthetic-') &&
-        !catalog.scope?.startsWith('provided-')) {
+      typeof catalog.scope !== 'string' || catalog.scope.trim().length === 0) {
     // The pilot's scope is retained as a descriptive string, not a complete-city claim.
     errors.push('metadata, version, timezone or scope invalid');
   }
@@ -237,7 +235,6 @@ export function findScheduledDirectTrips(
     return empty('not-covered');
   }
 
-  const patternById = new Map(catalog.patterns.map((pattern) => [pattern.id, pattern]));
   const eligiblePatterns = new Map<string, { pattern: ScheduledPattern; board: number; alight: number }>();
   for (const pattern of catalog.patterns) {
     const board = pattern.stops.findIndex((stop) =>
