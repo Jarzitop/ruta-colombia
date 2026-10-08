@@ -63,8 +63,16 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 
 - [x] Revisión independiente del ZIP privado y sus evidencias (709 viajes, dos variantes de 13/14 paradas, cinco regresiones topológicas). No se publicó dato operativo.
 - [x] Carpeta real excluida de Git público mediante `.gitignore`.
-- [~] `src/gtfs/calendar.ts` implementa semántica de `calendar.txt` / `calendar_dates.txt` con pruebas sintéticas. Pendiente pasar CI y asociar viajes con patrones y fechas reales.
+- [x] `src/gtfs/calendar.ts` interpreta calendario y excepciones; `src/gtfs/scheduled.ts` vincula variante, día y salida aproximada en parada de abordaje. Pruebas sintéticas y TypeScript aprobados en CI.
 - [ ] Confirmar licencia de reutilización de la entrega GTFS concreta y atribución requerida.
-- [ ] Normalizar `trip_id → service_id → patternId`, respetando las variantes y la ausencia de horarios en el motor actual.
+- [~] El segundo ZIP privado ya entrega relación tripId/serviceId/patternId/stopTimes para 709 viajes, con 16 vectores contrastados independientemente. Falta correr el verificador actual sobre el ZIP fuera de Git y conectar el modelo temporal al contrato/UI tras revisión de licencia.
 - [ ] Hacer pruebas físicas de acceso y abordar/descender antes de publicar instrucciones reales.
 - [ ] Integrar el primer viaje real en la APK tras resolver bloqueos; ver issue #14.
+
+## Segundo ZIP temporal de Bogotá (8 octubre)
+
+- [x] Checksum de los archivos del paquete: sin diferencias; 709 IDs únicos y 9.773 eventos alineados con el patrón; 16/16 casos documentales comprobados independientemente.
+- [x] Motor temporal multiciudad aislado `src/gtfs/scheduled.ts`, con búsqueda por fecha local GTFS y hora aproximada en la parada de abordaje (sin tiempo real ni horario preciso); 22 pruebas sintéticas.
+- [x] CI del módulo temporal y TypeScript verde: https://github.com/Jarzitop/ruta-colombia/actions/runs/37800407700.
+- [ ] Ejecutar `npm run verify:private-temporal` con la segunda extracción privada del ZIP (sin publicar datos) para verificar juntos el motor y los 16 vectores.
+- [ ] Resolver licencia aplicable a la revisión concreta, integrar ambas variantes con validación de fecha y realizar pruebas presenciales/Android; issue #14.
