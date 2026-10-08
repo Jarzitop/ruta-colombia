@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
-const script = new URL('./verify-bogota-pilot.mjs', import.meta.url).pathname;
+const script = fileURLToPath(new URL('./verify-bogota-pilot.mjs', import.meta.url));
 const execute = (root) => spawnSync(process.execPath, ['--experimental-strip-types', script, root], {
   encoding: 'utf8',
 });
