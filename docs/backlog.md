@@ -64,7 +64,7 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [x] Revisión independiente del ZIP privado y sus evidencias (709 viajes, dos variantes de 13/14 paradas, cinco regresiones topológicas). No se publicó dato operativo.
 - [x] Carpeta real excluida de Git público mediante `.gitignore`.
 - [x] `src/gtfs/calendar.ts` interpreta calendario y excepciones; `src/gtfs/scheduled.ts` vincula variante, día y salida aproximada en parada de abordaje. Pruebas sintéticas y TypeScript aprobados en CI.
-- [ ] Confirmar licencia de reutilización de la entrega GTFS concreta y atribución requerida.
+- [~] Evidencia documental: catálogo distrital y recurso declaran CC BY-SA 4.0; aplicación específica a `GTFS_20260929.zip` es inferencia razonable, pendiente aclaración a TransMilenio. Informe y decisión: `docs/bogota-license-and-service-decision.md`.
 - [~] El segundo ZIP privado ya entrega relación tripId/serviceId/patternId/stopTimes para 709 viajes, con 16 vectores contrastados independientemente. Falta correr el verificador actual sobre el ZIP fuera de Git y conectar el modelo temporal al contrato/UI tras revisión de licencia.
 - [ ] Hacer pruebas físicas de acceso y abordar/descender antes de publicar instrucciones reales.
 - [ ] Integrar el primer viaje real en la APK tras resolver bloqueos; ver issue #14.
@@ -81,4 +81,13 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 
 - [x] Pruebas de consulta con los datos privados: festivo 12 octubre, 150 programados al terminal largo; 303 a parada compartida, incluidos 153 del patrón corto. No se atribuyen viajes a destinos que la variante corta no atiende.
 - [x] Corregida la aceptación errónea de horas GTFS mal formadas con `arrivalSeconds`/`departureSeconds: null`; se añadieron 3 pruebas sintéticas de regresión.
-- [ ] Mantener la UI en modo ficticio mientras se define la integración temporal segura y la licencia del GTFS. Sin APK nueva ni aprobación Android.
+- [~] Interfaz ahora alterna recorrido estático y consulta por fecha con calendario **ficticio** de dos variantes; datos GTFS reales siguen aislados, `publishable:false` y sin APK nueva ni aprobación Android.
+
+## Consulta por fecha — incremento de interfaz 8 octubre
+
+- [x] Fixture temporal exclusivamente sintético en `src/data/synthetic/dev.temporal.ts`, ligado al dataset ficticio por `catalogDatasetVersion` y procedencia.
+- [x] Panel `src/components/ScheduledTripPanel.tsx` permite consultar fecha escrita en calendario local GTFS, con salidas y llegadas programadas aproximadas, estados de cobertura y sin afirmar tiempo real.
+- [x] Dos modos de búsqueda en `App.tsx`, con invalidación de resultados obsoletos al cambiar modo, fecha, origen o destino; no se incorpora ninguna ruta de Bogotá.
+- [x] Nuevas pruebas automáticas sobre 12/10 y 19/10 **ficticios**, variantes corta/larga, fecha inválida, fuera del feed y no invertir ruta.
+- [ ] Validar `main` completo en CI tras cambios y comprobar físicamente gestos, pantalla pequeña y arranque en modo avión en una futura APK.
+- [ ] Ensayo interno de Bogotá solo con permiso/condiciones de uso evaluadas, datos no públicos y etiqueta de revisión; no entregar APK a terceros sin cierre documental.
