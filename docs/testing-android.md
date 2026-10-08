@@ -19,6 +19,20 @@ Esta lista se ejecutará **solo después de agrupar cambios útiles** en interfa
 6. Cambiar de ciudad (cuando se incorpore una segunda ciudad auditada) debe limpiar paradas y resultado.
 7. Selección y botón deben ser legibles en pantalla pequeña y teclado/lectores de accesibilidad; la lista del selector debe cerrarse con Atrás.
 
+## Consulta por fecha (fixture ficticio, pendiente de Android)
+
+- [ ] Alternar entre **Recorrido directo** y **Por fecha de servicio** sin mostrar resultados del modo anterior.
+- [ ] Elegir DEV Alfa → DEV Beta y fecha `2026-10-12`: la muestra debe ofrecer las **dos variantes ficticias**, ordenadas por hora programada de abordaje; todas las horas se presentan como **aproximadas**, nunca tiempo real.
+- [ ] Elegir DEV Alfa → DEV Gamma el mismo día: solo la **variante larga** ficticia atiende ese destino.
+- [ ] Cambiar a `2026-10-19`: la variante de servicio especial desaparece y se conserva solo la programada para día ordinario dentro del fixture.
+- [ ] Elegir fecha fuera del intervalo `2026-10-01` a `2026-10-31`: debe informar falta de cobertura temporal, no ausencia de buses.
+- [ ] Probar `2026-02-30` (fecha inválida) y un formato distinto de `AAAA-MM-DD`: no debe aparecer un viaje.
+- [ ] Cambiar origen, destino o el modo después de calcular; no deben persistir resultados anteriores.
+- [ ] Repetir todas las consultas sin conexión, tras cerrar completamente la app y abrirla en modo avión.
+- [ ] Comprobar que el mapa esquemático no invente el trayecto de la variante corta ni líneas callejeras.
+
+**No usar estos casos como comprobación de recorridos reales de Bogotá**: las fechas y horas de la interfaz pertenecen a un fixture sintético y están señalizadas como tales.
+
 ## Mapa y estado sin conexión
 
 8. Arrastrar mapa vertical y horizontalmente: los gestos pertenecen al mapa, no desplazan toda la pantalla.
