@@ -11,6 +11,11 @@
     "android": {
       "package": "com.rutacolombia.mvp",
       "predictiveBackGestureEnabled": false
+    },
+    "extra": {
+      "eas": {
+        "projectId": "245fbd9f-37c0-4409-acc3-8f3357be02ed"
+      }
     }
   }
 }
