@@ -12,7 +12,7 @@
 
 1. [CI](../.github/workflows/ci.yml): `push` a `main`, `pull_request` a `main` y `workflow_dispatch` ejecutan `npm ci`, validación dataset, tests del validador, tests de rutas, `tsc` y Expo Doctor.
 2. [Android APK bajo demanda](../.github/workflows/android-apk.yml): solamente `workflow_dispatch`. Usa EAS perfil `preview` y la identidad EAS ya enlazada en `app.json`.
-3. Verificar el primer CI en https://github.com/Jarzitop/ruta-colombia/actions antes de considerar automatización validada.
+3. **CI verificado:** la ejecución https://github.com/Jarzitop/ruta-colombia/actions/runs/37717808794 finalizó en éxito; sus etapas de instalación, datos, tests, TypeScript y Expo Doctor pasaron.
 
 ## Cómo activar compilaciones Android desde GitHub
 
@@ -30,7 +30,8 @@ El token permite operar sobre recursos a los que la cuenta tenga acceso y debe p
 
 ## Seguimiento de trabajo: Issues y Kanban
 
-- Issues: https://github.com/Jarzitop/ruta-colombia/issues.
+- Issues: https://github.com/Jarzitop/ruta-colombia/issues (13 creados, incluidos 4 sprints y DevOps).
+- Creación del Kanban pendiente del propietario: https://github.com/Jarzitop/ruta-colombia/issues/13.
 - Tareas con prefijos `[S1]`–`[S4]` y prioridad `P0` (bloqueante), `P1` (importante), `P2` (condicional).
 - Cada issue documenta criterios de aceptación y dependencias. No cerrar tareas sin evidencia de tests o Android real cuando corresponda.
 - Estados Kanban propuestos: **Backlog → Ready → In progress → Review/Testing → Done**; usar **Blocked** para dependencias externas.
@@ -56,3 +57,15 @@ Las categorías de Kanban son **estado de trabajo**, diferentes de la aprobació
 - **Cierre:** comentario con evidencia, versión del dataset, resultado de CI/Android, y cerrar issue.
 
 **Importante:** una compilación APK satisfactoria no significa que la app esté validada funcionalmente. La prueba física del usuario sigue siendo imprescindible.
+
+## Estado confirmado y costos (2026-10-07)
+
+- [x] Archivo CI en GitHub.
+- [x] CI ejecutado satisfactoriamente (run 37717808794; todas las etapas de validación correctas).
+- [x] Workflow Android bajo demanda registrado (NO se ejecutó aún con token).
+- [x] Issues con criterios de aceptación creados.
+- [ ] Project visual/Kanban en GitHub: requiere creación manual.
+- [ ] Secreto `EXPO_TOKEN`: opcional hasta decidir generar APK desde GitHub; no necesario para CI.
+- [ ] APK desde workflow manual: pendiente.
+
+GitHub no exige tarjeta para los runners estándar de repositorios públicos. Expo Free no factura excesos al agotar cuota; simplemente pausa nuevos builds. Los costos futuros de Google Play quedan fuera del sprint y requieren decisión explícita.
