@@ -10,3 +10,9 @@ dist/
 !.env.example
 .DS_Store
 npm-debug.log*
+
+# GTFS de terceros en revisión: NO publicar ni incorporar a una APK antes de confirmar derechos.
+/data/bogota/pilot-001/
+/audit-work/
+/GTFS_*.zip
+/Bogota_pilot_*.zip
