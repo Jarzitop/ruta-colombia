@@ -37,6 +37,8 @@ jobs:
         run: npm run test:routing
       - name: Pruebas de selección de viaje
         run: npm run test:planner
+      - name: Pruebas del encuadre del mapa
+        run: npm run test:map
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
