@@ -43,6 +43,7 @@ jobs:
         run: |
           npm run test:expected-trips
           npm run verify:synthetic-trips
+          npm run test:bogota-handoff
       - name: Comprobar primera muestra de Bogotá si existe
         run: npm run verify:bogota-pilot
       - name: TypeScript
