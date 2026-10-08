@@ -66,16 +66,16 @@ export function SyntheticMap({
   const bounds = boundsForStops(dataset, focusIds);
 
   // Never present a full documented geometry as the partial trip's geometry.
-  const exactFullPattern = itinerary !== null && itinerary.patternId === pattern.id &&
-    itinerary.stopIds.length === pattern.stops.length &&
-    itinerary.stopIds.every((id, index) => id === pattern.stops[index]?.stopId);
+  const exactFullPattern = itinerary !== null && itinerary.patternId === pattern!.id &&
+    itinerary.stopIds.length === pattern!.stops.length &&
+    itinerary.stopIds.every((id, index) => id === pattern!.stops[index]?.stopId);
   const showFullReference = itinerary === null;
-  const showLine = (exactFullPattern || showFullReference) && pattern.geometry?.coordinates;
+  const showLine = (exactFullPattern || showFullReference) && pattern!.geometry?.coordinates;
 
   const routeFeature = showLine ? {
     type: 'Feature' as const,
     properties: { kind: exactFullPattern ? 'complete-trip' : 'full-pattern-reference' },
-    geometry: { type: 'LineString' as const, coordinates: pattern.geometry!.coordinates },
+    geometry: { type: 'LineString' as const, coordinates: pattern!.geometry!.coordinates },
   } : null;
 
   const origin = marker(originStopId);
