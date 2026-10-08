@@ -35,6 +35,8 @@ jobs:
         run: npm run test:validator
       - name: Pruebas del motor
         run: npm run test:routing
+      - name: Pruebas de selección de viaje
+        run: npm run test:planner
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
