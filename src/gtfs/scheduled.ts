@@ -196,6 +196,10 @@ export function validateScheduledCatalog(catalog: ScheduledCatalog): string[] {
       if (!event || !stop || event.stopId !== stop.stopId ||
           event.sequence !== stop.sequence ||
           ![0, 1].includes(event.timepoint) ||
+          gtfsSeconds(event.arrivalTime) === null ||
+          gtfsSeconds(event.departureTime) === null ||
+          !Number.isSafeInteger(event.arrivalSeconds) ||
+          !Number.isSafeInteger(event.departureSeconds) ||
           gtfsSeconds(event.arrivalTime) !== event.arrivalSeconds ||
           gtfsSeconds(event.departureTime) !== event.departureSeconds ||
           event.arrivalSeconds < priorDeparture ||
