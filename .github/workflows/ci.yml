@@ -56,6 +56,8 @@ jobs:
         run: npm run test:gtfs-calendar
       - name: Viajes programados y variantes sintéticas
         run: npm run test:scheduled
+      - name: Consulta por fecha en la interfaz ficticia
+        run: npm run test:synthetic-schedule
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
