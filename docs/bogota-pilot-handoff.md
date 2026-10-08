@@ -7,9 +7,30 @@ Este documento define qué debe entregar el chat «01 — Dirección y datos» p
 1. `data/bogota/pilot-001/dataset.json`: catálogo normalizado al contrato `TransitDataset` (`src/data/contract.ts`).
 2. `data/bogota/pilot-001/sources.md`: auditoría de procedencia de cada dataset original, URL de acceso, entidad publicadora, condiciones de licencia, fechas de consulta/actualización conocidas y descripción de las transformaciones.
 3. `data/bogota/pilot-001/coverage.md`: rutas y sentidos efectivamente incluidos, paradas cubiertas, datos faltantes y límites del piloto.
-4. `data/bogota/pilot-001/expected-trips.json`: **casos de regresión documentados**, con `cityId`, `originStopId`, `destinationStopId`, `expectedRouteId`, `expectedPatternId`, `expectedStopIds` en orden y `sourceRefIds` por caso. También incluir casos negativos cuando estén documentados.
+4. `data/bogota/pilot-001/expected-trips.json`: casos de regresión documentados, con el formato reproducible descrito abajo. Se exige `cityId`, `originStopId`, `destinationStopId` y `sourceRefIds` por caso, además de ruta, patrón, sentido y paradas esperadas cuando existe itinerario. Los casos negativos deben limitar explícitamente su afirmación a la **muestra proporcionada**.
 
 No crear estos archivos con datos presuntos. Si el chat de datos no puede obtener permiso de reutilización o recorridos documentados, debe entregar un informe de bloqueo y los archivos originales autorizados cuando aplique, no un itinerario inventado.
+
+## Formato exacto de `expected-trips.json`
+
+El verificador exige `schemaVersion: "0.1.0"`, `datasetVersion` igual al catálogo, `scope: "provided-catalog"` y un arreglo no vacío `cases`. Cada caso tiene un `id` único, `cityId`, `originStopId`, `destinationStopId`, `sourceRefIds` existentes en el dataset y un objeto `expected`.
+
+**Viaje positivo:** `expected.status: "ok"`, `routeId`, `patternId`, `directionId` y `stopIds` en orden, incluyendo origen y destino. Todos estos identificadores deben corresponder a una secuencia y permisos de abordaje y descenso documentados. El verificador busca la alternativa esperada entre todas las devueltas, sin asumir que sea la primera.
+
+**Caso negativo:** `expected.status: "no-direct-service"` o `"same-stop"` y `coverageNote` no vacío, explicando el alcance del catálogo. Un resultado negativo **no demuestra** que esa ruta no exista fuera de la muestra.
+
+Se puede consultar un ejemplo únicamente **ficticio** en [`src/data/synthetic/expected-trips.json`](../src/data/synthetic/expected-trips.json). No copiar sus rutas, coordenadas ni IDs para crear datos reales.
+
+Comandos disponibles:
+
+```bash
+npm run test:expected-trips
+npm run verify:synthetic-trips
+npm run test:bogota-handoff
+npm run verify:bogota-pilot
+```
+
+`verify:bogota-pilot` informa «PENDIENTE» sin fallar si todavía no hay ningún archivo real; bloquea entregas parciales, fuentes sintéticas o inconsistencias. No reemplaza la revisión documental, jurídica o presencial.
 
 ## Campos mínimos del dataset
 
