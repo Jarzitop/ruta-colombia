@@ -73,6 +73,13 @@ const tests = [
   ['no acepta resultados cuando el formulario está incompleto', () => {
     assert.equal(update(initialPlannerState, { type: 'result', value: result }), initialPlannerState);
   }],
+  ['cambio de modo borra solo el resultado, conserva origen y destino', () => {
+    const prior = update(selected(), { type: 'result', value: result });
+    const next = update(prior, { type: 'clear-result' });
+    assert.equal(next.result, null);
+    assert.equal(next.originStopId, 'dev-stop-a');
+    assert.equal(next.destinationStopId, 'dev-stop-c');
+  }],
 ];
 
 let failed = 0;
