@@ -20,6 +20,7 @@ export type PlannerAction =
   | { type: 'origin'; id: string }
   | { type: 'destination'; id: string }
   | { type: 'swap' }
+  | { type: 'clear-result' }
   | { type: 'result'; value: DirectSearchResult };
 
 type Catalog = Pick<TransitDataset, 'cities' | 'stops'>;
@@ -54,6 +55,7 @@ export function reducePlanner(
     };
   }
 
+  if (action.type === 'clear-result') return state.result === null ? state : { ...state, result: null };
   if (!state.cityId || !state.originStopId || !state.destinationStopId) return state;
   return { ...state, result: action.value };
 }
