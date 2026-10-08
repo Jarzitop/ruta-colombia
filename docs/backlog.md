@@ -91,3 +91,15 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [x] Nuevas pruebas automáticas sobre 12/10 y 19/10 **ficticios**, variantes corta/larga, fecha inválida, fuera del feed y no invertir ruta.
 - [ ] Validar `main` completo en CI tras cambios y comprobar físicamente gestos, pantalla pequeña y arranque en modo avión en una futura APK.
 - [ ] Ensayo interno de Bogotá solo con permiso/condiciones de uso evaluadas, datos no públicos y etiqueta de revisión; no entregar APK a terceros sin cierre documental.
+
+
+## Preparación de próxima APK interna — 8 octubre
+
+- [x] Panel temporal mejorado para presentar cada variante ficticia por separado, con horarios programados individuales y disclaimer de datos aproximados; cuando hay más de seis alternativas muestra solo las seis primeras y explica el límite.
+- [x] Conserva la fecha elegida al cambiar origen/destino; invalida el resultado anterior. Rechaza fechas imposibles antes de habilitar la consulta y muestra aviso de error.
+- [x] Ajuste adaptable para pantallas Android bajas: inicia con mapa oculto si altura < 700 puntos, manteniendo acceso al botón para mostrarlo; tarjeta de consulta con desplazamiento propio.
+- [x] Comprobación de preview `scripts/check-preview-data.mjs` y pruebas para bloquear catálogo no ficticio, mezcla de fuentes, calendario incompatible o carpetas de auditoría dentro del proyecto.
+- [x] GitHub Actions (CI y workflow APK) incorpora comprobaciones de preview; el comando local `npm run build:apk` dispone ahora de `prebuild:apk` con validación previa automática.
+- [ ] APK de este incremento: NO solicitada. Está pendiente de que el CI completo quede verde y de definir sesión de pruebas en teléfono real.
+- [ ] En Android: gestos MapLibre, visibilidad de controles en pantalla reducida, consulta de 2 variantes, cambios de fecha, arranque en frío en modo avión y estabilidad; matriz en `docs/testing-android.md`.
+- [ ] GTFS de Bogotá: todavía excluido del repositorio y de la APK; aclarar licencia, vigencia y ensayos internos antes de incorporar datos operativos.
