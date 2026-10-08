@@ -29,6 +29,10 @@ jobs:
           cache: npm
       - name: Instalar dependencias bloqueadas
         run: npm ci
+      - name: No publicar datos GTFS privados
+        run: |
+          npm run test:private-data-gate
+          npm run check:private-data
       - name: Contrato de datos
         run: npm run validate:data
       - name: Pruebas del validador
