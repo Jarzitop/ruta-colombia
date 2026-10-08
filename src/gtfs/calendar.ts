@@ -71,7 +71,9 @@ export function resolveGtfsServiceDay(
       row.start_date > row.end_date) return 'unknown';
   if (yyyymmdd < row.start_date || yyyymmdd > row.end_date) return 'inactive';
 
-  const flag = row[WEEKDAYS[date.getUTCDay()]];
+  const weekday = WEEKDAYS[date.getUTCDay()];
+  if (!weekday) return 'unknown';
+  const flag = row[weekday];
   if (flag === '1') return 'active';
   if (flag === '0') return 'inactive';
   return 'unknown';
