@@ -46,6 +46,8 @@ jobs:
           npm run test:bogota-handoff
       - name: Comprobar primera muestra de Bogotá si existe
         run: npm run verify:bogota-pilot
+      - name: Etiquetas de procedencia de catálogo
+        run: npm run test:catalog-notice
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
