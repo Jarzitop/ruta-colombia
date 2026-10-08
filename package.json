@@ -12,7 +12,8 @@
     "doctor": "npx expo-doctor@latest",
     "build:apk": "npx eas-cli@latest build --platform android --profile preview",
     "test:validator": "node scripts/test-validator.mjs",
-    "test:routing": "node --experimental-strip-types scripts/test-routing.mjs"
+    "test:routing": "node --experimental-strip-types scripts/test-routing.mjs",
+    "test:planner": "node --experimental-strip-types scripts/test-planner.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
