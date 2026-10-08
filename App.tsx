@@ -2,12 +2,14 @@ import { useReducer, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { activeDataset } from './src/data/active';
+import { describeCatalog } from './src/data/notice';
 import { CatalogPicker, type CatalogOption } from './src/components/CatalogPicker';
 import { findDirectItineraries, type DirectItinerary, type DirectSearchResult } from './src/routing/direct';
 import { initialPlannerState, reducePlanner } from './src/planner/state';
 import { TransitMap } from './src/map/TransitMap';
 
 const dataset = activeDataset;
+const notice = describeCatalog(dataset);
 
 function stopName(id: string): string {
   return dataset.stops.find((stop) => stop.id === id)?.name ?? 'Parada fuera del catálogo';
@@ -95,9 +97,9 @@ export default function App() {
         </View>
 
         <View style={styles.warningCard}>
-          <Text style={styles.warningTitle}>PRUEBA CON DATOS SINTÉTICOS — NO PUBLICABLE</Text>
+          <Text style={styles.warningTitle}>{notice.title}</Text>
           <Text style={styles.warningBody}>
-            Estos recorridos no corresponden a servicios reales. Versión {dataset.datasetVersion}.
+            {notice.description}
           </Text>
         </View>
 
@@ -159,7 +161,7 @@ export default function App() {
         </View>
 
         <View style={styles.mapHeading}>
-          <Text style={styles.mapTitle}>{dataset.publishable ? 'Mapa local de paradas' : 'Esquema local de paradas ficticias'}</Text>
+          <Text style={styles.mapTitle}>{notice.mapTitle}</Text>
           <Pressable accessibilityRole="button" onPress={() => {
             setMapVisible(!mapVisible);
             setMapState('loading');
