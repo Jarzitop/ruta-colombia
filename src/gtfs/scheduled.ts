@@ -2,7 +2,7 @@ import {
   resolveGtfsServiceDay,
   type GtfsCalendarRow,
   type GtfsCalendarDateRow,
-} from './calendar';
+} from './calendar.ts';
 
 export interface ScheduledStop {
   stopId: string;
