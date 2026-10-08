@@ -44,7 +44,7 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 
 ## Verificación próxima
 
-- [~] CI automatizado: `npm ci`, dataset, 5 tests del validador, 17 tests de rutas, 13 tests de selección, 5 tests de encuadre de mapa, `tsc` y Expo Doctor. Comprobar `main` en verde tras la última modificación.
+- [x] CI actualizado: instalación reproducible, validador, 17 pruebas de viajes directos, 13 de selección, 5 de encuadre, 12 pruebas de expectativas documentadas, 3 de entrega Bogotá, TypeScript y Expo Doctor. Ejecución verde: https://github.com/Jarzitop/ruta-colombia/actions/runs/37724658151.
 - [ ] En Android: casos de `docs/testing-android.md`; no se marcarán hasta recibir resultados.
 
 ## Decisión del mapa base
@@ -56,5 +56,5 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 ## Integración muestra Bogotá
 
 - [x] Catálogo activo centralizado en `src/data/active.ts` y mapa genérico `src/map/TransitMap.tsx`.
-- [x] Contrato de entrega y casos de regresión requeridos en `docs/bogota-pilot-handoff.md`.
+- [x] Contrato de entrega en `docs/bogota-pilot-handoff.md`, validador de viajes documentados y compuerta de lote real. Sin archivos de Bogotá, la compuerta informa `PENDIENTE` sin activar rutas; un lote parcial o sintético bloquea CI.
 - [ ] Auditoría de datos y licencia; importación; pruebas sobre itinerario real; revisión Android posterior.
