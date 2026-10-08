@@ -1,5 +1,5 @@
 import { useReducer, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { activeDataset, activeScheduledCatalog } from './src/data/active';
 import { describeCatalog } from './src/data/notice';
@@ -56,13 +56,16 @@ function TripResult({ result }: { result: DirectSearchResult | null }) {
 }
 
 export default function App() {
+  const { height: screenHeight } = useWindowDimensions();
+  const compactScreen = screenHeight < 700;
   const [planner, dispatch] = useReducer(
     (state: typeof initialPlannerState, action: Parameters<typeof reducePlanner>[1]) =>
       reducePlanner(state, action, dataset),
     initialPlannerState,
   );
   const [scheduleMode, setScheduleMode] = useState(false);
-  const [mapVisible, setMapVisible] = useState(true);
+  const [serviceDateText, setServiceDateText] = useState('2026-10-12');
+  const [mapVisible, setMapVisible] = useState(() => screenHeight >= 700);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'failed'>('loading');
 
   const cities: CatalogOption[] = dataset.cities.map((city) => ({
@@ -175,7 +178,7 @@ export default function App() {
           </Pressable>}
         </View>
 
-        <View style={[styles.tripCard, scheduleMode && styles.scheduleCard]}>
+        <View style={[styles.tripCard, scheduleMode && styles.scheduleCard, compactScreen && styles.compactTripCard]}>
           <ScrollView
             nestedScrollEnabled
             style={styles.resultScroll}
@@ -186,6 +189,8 @@ export default function App() {
               <ScheduledTripPanel
                 key={String(planner.cityId) + ':' + String(planner.originStopId) + ':' + String(planner.destinationStopId)}
                 schedule={activeScheduledCatalog}
+                dateText={serviceDateText}
+                onChangeDateText={setServiceDateText}
                 originStopId={planner.originStopId}
                 destinationStopId={planner.destinationStopId}
                 stopName={stopName}
@@ -278,7 +283,8 @@ const styles = StyleSheet.create({
     borderRadius: 10, backgroundColor: '#FFFFFF', borderWidth: 1,
     borderColor: '#CBD5E1', maxHeight: 156, minHeight: 55,
   },
-  scheduleCard: { maxHeight: 188 },
+  scheduleCard: { maxHeight: 230 },
+  compactTripCard: { maxHeight: 150 },
   resultScroll: { flexGrow: 0 },
   resultScrollContent: { padding: 10 },
   resultDetails: { gap: 3 },
@@ -290,7 +296,7 @@ const styles = StyleSheet.create({
   mapToggle: { fontSize: 11, color: '#5B21B6', fontWeight: '700' },
   mapArea: { flex: 1, minHeight: 120 },
   mapHidden: {
-    flex: 1, minHeight: 90, justifyContent: 'center', padding: 12,
+    minHeight: 54, justifyContent: 'center', padding: 12,
     borderRadius: 12, backgroundColor: '#E2E8F0',
   },
   mapNote: { fontSize: 10, lineHeight: 14, color: '#475569' },
