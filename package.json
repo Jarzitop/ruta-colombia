@@ -18,7 +18,8 @@
     "test:expected-trips": "node --experimental-strip-types scripts/test-expected-trips.mjs",
     "verify:synthetic-trips": "node --experimental-strip-types scripts/verify-expected-trips.mjs src/data/synthetic/dev.dataset.json src/data/synthetic/expected-trips.json",
     "verify:bogota-pilot": "node --experimental-strip-types scripts/verify-bogota-pilot.mjs",
-    "test:bogota-handoff": "node --experimental-strip-types scripts/test-bogota-handoff.mjs"
+    "test:bogota-handoff": "node --experimental-strip-types scripts/test-bogota-handoff.mjs",
+    "test:catalog-notice": "node --experimental-strip-types scripts/test-catalog-notice.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
