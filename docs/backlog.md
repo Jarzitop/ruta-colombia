@@ -17,16 +17,16 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [~] APK instalada en teléfono: app estable, MapLibre y geometría sintética visibles. Detectado conflicto de gestos por `ScrollView`; corrección implementada y pendiente de retest físico.
 - [ ] Verificar en Android real el comportamiento sin conexión del mapa/fallback.
 - [ ] Recibir dataset real validado de Bogotá desde «01 — Dirección y datos».
-- [ ] Incorporar `package-lock.json` generado en el equipo que compiló la APK y preservar vinculación con proyecto EAS existente.
+- [x] `package-lock.json` y `app.json` con identificador de proyecto EAS incorporados en `main`; commit `6ecaf7c`.
 
 ## Sprint 2 · 12–17 octubre
 
-- [ ] Importador de datos reales.
-- [~] Motor directo `src/routing/direct.ts` implementado; 17/17 pruebas de lógica y `tsc` aislado correctos en Node 22.16. Pendiente `npm run typecheck` del proyecto completo y uso desde interfaz.
+- [ ] Importador de datos reales (depende de «01 — Dirección y datos»).
+- [x] Motor directo `src/routing/direct.ts`: 17/17 pruebas y `npm run typecheck` exitosos en Windows según registro del usuario.
 - [ ] Motor con máximo un transbordo explícito (no se infiere caminar ni el regreso).
 - [ ] Ranking: menos transbordos y luego menor caminata documentada.
-- [~] Motor directo distingue `not-covered`, `same-stop`, `invalid-data` y `no-direct-service`; falta integrarlo a la interfaz.
-- [ ] Instrucciones y geometría de itinerario.
+- [~] Selección ciudad → origen → destino y presentación de resultados directos integradas en la pantalla con catálogo sintético. Pendientes `npm run typecheck` y APK Android de este incremento.
+- [~] Instrucciones básicas para viaje directo sintético. El mapa conserva patrón ficticio completo como referencia; aún NO presenta geometría de segmento del itinerario.
 
 ## Sprint 3 · 18–22 octubre
 
@@ -41,3 +41,8 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [ ] Pruebas en dispositivos Android.
 - [ ] Correcciones de bloqueos, comprensión y rendimiento.
 - [ ] APK candidata y documentación final.
+
+## Verificación próxima
+
+- [ ] En Windows: `npm ci`, `npm run test:routing`, `npm run typecheck`, `npm run doctor` después de `git pull`.
+- [ ] En Android: casos de `docs/testing-android.md`; no se marcarán hasta recibir resultados.
