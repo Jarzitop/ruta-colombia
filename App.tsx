@@ -1,14 +1,13 @@
 import { useReducer, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import syntheticJson from './src/data/synthetic/dev.dataset.json';
-import type { TransitDataset } from './src/data/contract';
+import { activeDataset } from './src/data/active';
 import { CatalogPicker, type CatalogOption } from './src/components/CatalogPicker';
 import { findDirectItineraries, type DirectItinerary, type DirectSearchResult } from './src/routing/direct';
 import { initialPlannerState, reducePlanner } from './src/planner/state';
-import { SyntheticMap } from './src/map/SyntheticMap';
+import { TransitMap } from './src/map/TransitMap';
 
-const dataset = syntheticJson as unknown as TransitDataset;
+const dataset = activeDataset;
 
 function stopName(id: string): string {
   return dataset.stops.find((stop) => stop.id === id)?.name ?? 'Parada fuera del catálogo';
@@ -160,7 +159,7 @@ export default function App() {
         </View>
 
         <View style={styles.mapHeading}>
-          <Text style={styles.mapTitle}>Esquema local de paradas ficticias</Text>
+          <Text style={styles.mapTitle}>{dataset.publishable ? 'Mapa local de paradas' : 'Esquema local de paradas ficticias'}</Text>
           <Pressable accessibilityRole="button" onPress={() => {
             setMapVisible(!mapVisible);
             setMapState('loading');
@@ -171,7 +170,8 @@ export default function App() {
 
         {mapVisible ? (
           <View style={styles.mapArea}>
-            <SyntheticMap
+            <TransitMap
+              dataset={dataset}
               cityId={planner.cityId}
               originStopId={planner.originStopId}
               destinationStopId={planner.destinationStopId}
