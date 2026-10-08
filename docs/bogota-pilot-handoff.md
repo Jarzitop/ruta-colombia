@@ -2,6 +2,8 @@
 
 Este documento define qué debe entregar el chat «01 — Dirección y datos» para pasar de la muestra sintética a un **viaje directo real y trazable**. No exige una ciudad completa ni inventa información faltante.
 
+**Recepción al 7 de octubre de 2026:** se recibió por este chat un ZIP auditado de Bogotá. La primera muestra pasó comprobaciones estructurales independientes, pero **no** se incorporó al repositorio público ni a la aplicación: falta aclarar la licencia de la versión concreta y normalizar calendario/variantes antes de afirmar disponibilidad de viajes. La situación y la validación local segura están en [`bogota-private-audit-review.md`](bogota-private-audit-review.md). Los requisitos siguientes continúan siendo el contrato de referencia.
+
 ## Archivos de entrega
 
 1. `data/bogota/pilot-001/dataset.json`: catálogo normalizado al contrato `TransitDataset` (`src/data/contract.ts`).
