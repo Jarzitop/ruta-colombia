@@ -16,12 +16,12 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [x] APK Android `preview` generada correctamente con EAS Build.
 - [~] APK instalada en teléfono: app estable, MapLibre y geometría sintética visibles. Detectado conflicto de gestos por `ScrollView`; corrección implementada y pendiente de retest físico.
 - [ ] Verificar en Android real arranque en frío en modo avión, render local MapLibre (`androidView=texture`), zoom y gestos sin pantalla negra.
-- [ ] Recibir dataset real validado de Bogotá desde «01 — Dirección y datos»; entrega requerida en `docs/bogota-pilot-handoff.md`. No se ha recibido ningún archivo real.
+- [~] ZIP documental real recibido en el chat y auditado en privado (1 ruta, 14 paradas en un patrón, 5 casos). Licencia específica no aclarada, variantes/calendario pendientes; **NO incorporado** al GitHub público ni a `active.ts`. Revisión en `docs/bogota-private-audit-review.md`.
 - [x] `package-lock.json` y `app.json` con identificador de proyecto EAS incorporados en `main`; commit `6ecaf7c`.
 
 ## Sprint 2 · 12–17 octubre
 
-- [ ] Importador de datos reales (depende de «01 — Dirección y datos»).
+- [~] Recibida primera muestra auditada fuera del repositorio público; validador disponible, pero **bloqueada** integración operativa por licencia de versión concreta, variantes y calendario.
 - [x] Motor directo `src/routing/direct.ts`: 17/17 pruebas y `npm run typecheck` exitosos en Windows según registro del usuario.
 - [ ] Motor con máximo un transbordo explícito (no se infiere caminar ni el regreso).
 - [ ] Ranking: menos transbordos y luego menor caminata documentada.
@@ -57,4 +57,14 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 
 - [x] Catálogo activo centralizado en `src/data/active.ts` y mapa genérico `src/map/TransitMap.tsx`.
 - [x] Contrato de entrega en `docs/bogota-pilot-handoff.md`, validador de viajes documentados y compuerta de lote real. Sin archivos de Bogotá, la compuerta informa `PENDIENTE` sin activar rutas; un lote parcial o sintético bloquea CI.
-- [ ] Auditoría de datos y licencia; importación; pruebas sobre itinerario real; revisión Android posterior.
+- [~] Auditoría estructural inicial del ZIP de Bogotá sin inconsistencias detectadas, pero licencia de redistribución y modelo temporal pendientes. No hay incorporación en app ni pruebas sobre Android real.
+
+## Bloqueo específico del primer GTFS Bogotá
+
+- [x] Revisión independiente del ZIP privado y sus evidencias (709 viajes, dos variantes de 13/14 paradas, cinco regresiones topológicas). No se publicó dato operativo.
+- [x] Carpeta real excluida de Git público mediante `.gitignore`.
+- [~] `src/gtfs/calendar.ts` implementa semántica de `calendar.txt` / `calendar_dates.txt` con pruebas sintéticas. Pendiente pasar CI y asociar viajes con patrones y fechas reales.
+- [ ] Confirmar licencia de reutilización de la entrega GTFS concreta y atribución requerida.
+- [ ] Normalizar `trip_id → service_id → patternId`, respetando las variantes y la ausencia de horarios en el motor actual.
+- [ ] Hacer pruebas físicas de acceso y abordar/descender antes de publicar instrucciones reales.
+- [ ] Integrar el primer viaje real en la APK tras resolver bloqueos; ver issue #14.
