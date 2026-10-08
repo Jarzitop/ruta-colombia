@@ -39,6 +39,10 @@ jobs:
         run: npm run test:planner
       - name: Pruebas del encuadre del mapa
         run: npm run test:map
+      - name: Regresiones de viajes documentados
+        run: |
+          npm run test:expected-trips
+          npm run verify:synthetic-trips
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
