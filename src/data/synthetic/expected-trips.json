@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "0.1.0",
+  "datasetVersion": "dev-synthetic-001",
+  "scope": "provided-catalog",
+  "cases": [
+    {
+      "id": "dev-A-C-direct",
+      "cityId": "dev-city",
+      "originStopId": "dev-stop-a",
+      "destinationStopId": "dev-stop-c",
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ],
+      "expected": {
+        "status": "ok",
+        "routeId": "dev-route-1",
+        "patternId": "dev-pattern-1-outbound",
+        "directionId": "dev-outbound",
+        "stopIds": [
+          "dev-stop-a",
+          "dev-stop-b",
+          "dev-stop-c"
+        ]
+      }
+    },
+    {
+      "id": "dev-B-C-direct",
+      "cityId": "dev-city",
+      "originStopId": "dev-stop-b",
+      "destinationStopId": "dev-stop-c",
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ],
+      "expected": {
+        "status": "ok",
+        "routeId": "dev-route-1",
+        "patternId": "dev-pattern-1-outbound",
+        "directionId": "dev-outbound",
+        "stopIds": [
+          "dev-stop-b",
+          "dev-stop-c"
+        ]
+      }
+    },
+    {
+      "id": "dev-C-A-no-reverse",
+      "cityId": "dev-city",
+      "originStopId": "dev-stop-c",
+      "destinationStopId": "dev-stop-a",
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ],
+      "coverageNote": "Fixture synthetic contains only outbound pattern; absence is limited to dev-synthetic-001 and is NOT evidence about real buses.",
+      "expected": {
+        "status": "no-direct-service"
+      }
+    },
+    {
+      "id": "dev-B-B-no-ride",
+      "cityId": "dev-city",
+      "originStopId": "dev-stop-b",
+      "destinationStopId": "dev-stop-b",
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ],
+      "coverageNote": "Origin and destination refer to the same synthetic stop.",
+      "expected": {
+        "status": "same-stop"
+      }
+    }
+  ]
+}
