@@ -1,0 +1,28 @@
+{
+  "name": "ruta-colombia",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "prebuild:android": "expo prebuild --platform android --clean",
+    "typecheck": "tsc --noEmit",
+    "validate:data": "node scripts/validate-dataset.mjs src/data/synthetic/dev.dataset.json",
+    "doctor": "npx expo-doctor@latest",
+    "build:apk": "npx eas-cli@latest build --platform android --profile preview",
+    "test:validator": "node scripts/test-validator.mjs"
+  },
+  "dependencies": {
+    "@maplibre/maplibre-react-native": "11.5.0",
+    "expo": "57.0.27",
+    "expo-status-bar": "57.0.1",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.4",
+    "typescript": "6.0.3"
+  },
+  "packageManager": "npm@10.9.2"
+}

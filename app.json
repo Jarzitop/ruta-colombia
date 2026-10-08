@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "Ruta Colombia",
+    "slug": "ruta-colombia",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "@maplibre/maplibre-react-native"
+    ],
+    "android": {
+      "package": "com.rutacolombia.mvp",
+      "predictiveBackGestureEnabled": false
+    }
+  }
+}

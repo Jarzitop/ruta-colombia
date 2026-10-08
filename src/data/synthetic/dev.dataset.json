@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "0.1.0",
+  "datasetVersion": "dev-synthetic-001",
+  "label": "DATOS SINTÉTICOS DE DESARROLLO — NO PUBLICABLES",
+  "publishable": false,
+  "sourceRefs": [
+    {
+      "id": "src-dev-synthetic",
+      "kind": "synthetic",
+      "publisher": "Ruta Colombia MVP",
+      "title": "Geometría y paradas ficticias para probar integración nativa",
+      "consultedAt": "2026-10-07",
+      "notes": "No representa rutas, paradas, horarios ni servicios reales."
+    }
+  ],
+  "cities": [
+    {
+      "id": "dev-city",
+      "name": "Sandbox sintético",
+      "countryCode": "CO",
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ]
+    }
+  ],
+  "stops": [
+    {
+      "id": "dev-stop-a",
+      "cityId": "dev-city",
+      "name": "DEV Alfa",
+      "latitude": 4.646,
+      "longitude": -74.085,
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ]
+    },
+    {
+      "id": "dev-stop-b",
+      "cityId": "dev-city",
+      "name": "DEV Beta",
+      "latitude": 4.649,
+      "longitude": -74.0815,
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ]
+    },
+    {
+      "id": "dev-stop-c",
+      "cityId": "dev-city",
+      "name": "DEV Gamma",
+      "latitude": 4.652,
+      "longitude": -74.078,
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ]
+    }
+  ],
+  "routes": [
+    {
+      "id": "dev-route-1",
+      "cityId": "dev-city",
+      "publicCode": "DEV-1",
+      "name": "Ruta sintética de prueba",
+      "operator": "FICTICIO",
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ]
+    }
+  ],
+  "patterns": [
+    {
+      "id": "dev-pattern-1-outbound",
+      "cityId": "dev-city",
+      "routeId": "dev-route-1",
+      "directionId": "dev-outbound",
+      "headsign": "DEV Gamma",
+      "stops": [
+        {
+          "stopId": "dev-stop-a",
+          "sequence": 1,
+          "boardingAllowed": true,
+          "alightingAllowed": true
+        },
+        {
+          "stopId": "dev-stop-b",
+          "sequence": 2,
+          "boardingAllowed": true,
+          "alightingAllowed": true
+        },
+        {
+          "stopId": "dev-stop-c",
+          "sequence": 3,
+          "boardingAllowed": true,
+          "alightingAllowed": true
+        }
+      ],
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74.085,
+            4.646
+          ],
+          [
+            -74.0832,
+            4.6474
+          ],
+          [
+            -74.0815,
+            4.649
+          ],
+          [
+            -74.0799,
+            4.6504
+          ],
+          [
+            -74.078,
+            4.652
+          ]
+        ]
+      },
+      "sourceRefIds": [
+        "src-dev-synthetic"
+      ]
+    }
+  ],
+  "walkingConnections": []
+}
