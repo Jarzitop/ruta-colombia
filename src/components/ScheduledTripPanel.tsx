@@ -8,12 +8,30 @@ interface Props {
   schedule: ScheduledCatalog | null;
   originStopId: string | null;
   destinationStopId: string | null;
+  dateText: string;
+  onChangeDateText: (value: string) => void;
   stopName: (id: string) => string;
 }
 
-/** Development-only UI. No GTFS files are requested over the network. */
-export function ScheduledTripPanel({ schedule, originStopId, destinationStopId, stopName }: Props) {
-  const [dateText, setDateText] = useState('2026-10-12');
+const statusMessages: Record<Exclude<ScheduledResult['status'], 'ok'>, string> = {
+  'invalid-query': 'La fecha no es válida. Usa AAAA-MM-DD.',
+  'invalid-data': 'La programación contiene errores. No se puede sugerir un viaje confiable.',
+  'same-stop': 'El origen y el destino son la misma parada.',
+  'not-covered': 'Alguna parada está fuera de la muestra disponible.',
+  'date-outside-feed': 'No tenemos programación para esa fecha. Esto no demuestra que no haya servicio.',
+  'calendar-unknown': 'El calendario no permite confirmar los viajes para esa fecha.',
+  'no-scheduled-trip-in-sample': 'No hay viajes programados en esta muestra para ese recorrido y fecha. Puede haber otros servicios no incluidos.',
+};
+
+/** Display programmed service times only; never call these predictions. */
+function scheduleTime(raw: string, approximate: boolean): string {
+  return (approximate ? 'programada aproximada' : 'programada') + ': ' + raw;
+}
+
+/** Local synthetic schedule only until rights/coverage are reviewed. */
+export function ScheduledTripPanel({
+  schedule, originStopId, destinationStopId, dateText, onChangeDateText, stopName,
+}: Props) {
   const [result, setResult] = useState<ScheduledResult | null>(null);
   const date = toGtfsServiceDate(dateText);
   const ready = schedule !== null && originStopId !== null &&
@@ -28,19 +46,6 @@ export function ScheduledTripPanel({ schedule, originStopId, destinationStopId, 
     }));
   };
 
-  const statusMessages: Record<Exclude<ScheduledResult['status'], 'ok'>, string> = {
-    'invalid-query': 'Fecha inválida. Usa una fecha real con el formato AAAA-MM-DD.',
-    'invalid-data': 'La programación del catálogo es inconsistente. No podemos recomendar un viaje.',
-    'same-stop': 'El origen y destino son la misma parada.',
-    'not-covered': 'Alguna parada está fuera de esta muestra de recorridos.',
-    'date-outside-feed': 'No tenemos datos programados vigentes para esa fecha.',
-    'calendar-unknown': 'No se pudo confirmar el calendario de estos viajes.',
-    'no-scheduled-trip-in-sample': 'No hay viajes programados en esta muestra para ese recorrido y fecha. No implica que no exista servicio en la ciudad.',
-  };
-  const candidate = result?.status === 'ok' ? result.candidates[0] : undefined;
-  const pattern = candidate
-    ? schedule?.patterns.find((item) => item.id === candidate.patternId) : undefined;
-
   return (
     <View style={styles.container}>
       <View style={styles.dateRow}>
@@ -49,80 +54,111 @@ export function ScheduledTripPanel({ schedule, originStopId, destinationStopId, 
           <TextInput
             style={styles.input}
             value={dateText}
-            onChangeText={(text) => {
-              setDateText(text);
+            onChangeText={(value) => {
+              onChangeDateText(value);
               setResult(null);
             }}
             keyboardType="numbers-and-punctuation"
+            returnKeyType="done"
             maxLength={10}
             placeholder="AAAA-MM-DD"
-            accessibilityLabel="Fecha de servicio, año mes día"
+            accessibilityLabel="Fecha del servicio, año mes día"
           />
         </View>
         <Pressable
           style={[styles.button, !ready && styles.buttonDisabled]}
           disabled={!ready}
           accessibilityRole="button"
-          accessibilityLabel="Consultar viajes programados de prueba"
+          accessibilityLabel="Consultar programación ficticia para la fecha"
           onPress={search}
         >
-          <Text style={styles.buttonText}>Consultar fecha</Text>
+          <Text style={styles.buttonText}>Consultar</Text>
         </Pressable>
       </View>
       <Text style={styles.note}>
-        Prueba ficticia: 12/10 (dos variantes) o 19/10 (variante larga).
-        {' '}Horarios aproximados; no son tiempo real.
+        Ejemplo ficticio: 12/10 (dos variantes) o 19/10 (solo la larga).
+        {' '}Los horarios no indican llegada en tiempo real.
       </Text>
-      {schedule === null && (
-        <Text style={styles.message}>No existe un calendario compatible con el catálogo activo.</Text>
+
+      {dateText.length > 0 && date === null && (
+        <Text style={styles.error}>Fecha inválida. Introduce una fecha real: AAAA-MM-DD.</Text>
       )}
-      {result?.status === 'ok' && candidate && (
-        <View style={styles.result}>
+      {schedule === null && (
+        <Text style={styles.message}>No existe un calendario compatible con el catálogo seleccionado.</Text>
+      )}
+
+      {result?.status === 'ok' && (
+        <View style={styles.result} accessibilityLiveRegion="polite">
           <Text style={styles.title}>
-            {result.candidates.length} viaje(s) programado(s) en la muestra
+            {result.candidates.length} viaje(s) programado(s) en esta muestra
           </Text>
-          <Text style={styles.message}>
-            Primera salida programada aproximada desde {stopName(candidate.boardingStopId)}:
-            {' '}{candidate.scheduledBoardDeparture}.
-          </Text>
-          <Text style={styles.message}>
-            Descenso en {stopName(candidate.alightingStopId)}.
-            {' '}Llegada programada aproximada: {candidate.scheduledAlightArrival}.
-          </Text>
-          <Text style={styles.message}>
-            Patrón {candidate.directionId}; variante de {pattern?.stops.length ?? '—'} paradas.
-            {' '}Sin información en tiempo real.
+          {result.candidates.slice(0, 6).map((candidate, index) => {
+            const pattern = schedule?.patterns.find((item) => item.id === candidate.patternId);
+            return (
+              <View key={candidate.tripId} style={styles.candidate}>
+                <Text style={styles.candidateTitle}>
+                  Opción {index + 1} · Variante de {pattern?.stops.length ?? '?'} paradas
+                </Text>
+                <Text style={styles.message}>
+                  Abordaje en {stopName(candidate.boardingStopId)}. Salida{' '}
+                  {scheduleTime(candidate.scheduledBoardDeparture, candidate.boardingTimeApproximate)}.
+                </Text>
+                <Text style={styles.message}>
+                  Descenso en {stopName(candidate.alightingStopId)}. Llegada{' '}
+                  {scheduleTime(candidate.scheduledAlightArrival, candidate.alightingTimeApproximate)}.
+                </Text>
+              </View>
+            );
+          })}
+          {result.candidates.length > 6 && (
+            <Text style={styles.message}>
+              Se muestran las primeras 6 opciones ordenadas por salida programada.
+            </Text>
+          )}
+          <Text style={styles.disclaimer}>
+            Zona horaria: {result.timezone}. Programación de la muestra, no disponibilidad ni tiempo real.
           </Text>
         </View>
       )}
       {result && result.status !== 'ok' && (
-        <Text style={styles.message}>{statusMessages[result.status]}</Text>
+        <Text style={styles.message} accessibilityLiveRegion="polite">
+          {statusMessages[result.status]}
+        </Text>
       )}
       {result === null && schedule !== null && (
-        <Text style={styles.message}>Elige origen y destino, revisa la fecha y consulta la muestra.</Text>
+        <Text style={styles.message}>
+          Selecciona origen y destino; luego consulta una fecha cubierta por el catálogo.
+        </Text>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { gap: 5 },
+  container: { gap: 6 },
   dateRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 8 },
   dateField: { flex: 1, minWidth: 0, gap: 3 },
-  label: { fontSize: 11, color: '#475569', fontWeight: '700' },
+  label: { fontSize: 12, color: '#475569', fontWeight: '700' },
   input: {
-    height: 40, borderColor: '#CBD5E1', borderWidth: 1,
+    minHeight: 44, borderColor: '#CBD5E1', borderWidth: 1,
     borderRadius: 8, paddingHorizontal: 10, backgroundColor: '#FFFFFF',
-    fontSize: 13, color: '#0F172A',
+    fontSize: 14, color: '#0F172A',
   },
   button: {
-    minHeight: 40, paddingHorizontal: 12, borderRadius: 8,
+    minHeight: 44, paddingHorizontal: 12, borderRadius: 8,
     backgroundColor: '#5B21B6', alignItems: 'center', justifyContent: 'center',
   },
   buttonDisabled: { backgroundColor: '#A78BFA' },
-  buttonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
-  note: { fontSize: 10, lineHeight: 14, color: '#92400E' },
-  result: { gap: 2 },
-  title: { color: '#0F172A', fontSize: 12, fontWeight: '800' },
-  message: { color: '#334155', fontSize: 11, lineHeight: 15 },
+  buttonText: { color: '#FFFFFF', fontWeight: '700', fontSize: 13 },
+  note: { fontSize: 11, lineHeight: 16, color: '#92400E' },
+  error: { fontSize: 12, color: '#B91C1C', fontWeight: '700' },
+  result: { gap: 6 },
+  candidate: {
+    borderRadius: 8, borderWidth: 1, borderColor: '#DDD6FE',
+    padding: 8, gap: 3, backgroundColor: '#FAF5FF',
+  },
+  candidateTitle: { color: '#4C1D95', fontWeight: '800', fontSize: 12 },
+  title: { color: '#0F172A', fontSize: 13, fontWeight: '800' },
+  message: { color: '#334155', fontSize: 12, lineHeight: 17 },
+  disclaimer: { color: '#475569', fontSize: 11, lineHeight: 16 },
 });
