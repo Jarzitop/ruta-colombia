@@ -40,6 +40,9 @@ jobs:
           npm run test:routing
           npm run test:planner
           npm run test:map
+          npm run test:expected-trips
+          npm run verify:synthetic-trips
+          npm run verify:bogota-pilot
           npm run typecheck
       - name: Configurar Expo y EAS
         uses: expo/expo-github-action@v8
