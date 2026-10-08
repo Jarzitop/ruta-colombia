@@ -1,4 +1,6 @@
 import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 /**
  * Guard for the public repository while the GTFS reuse license is unresolved.
@@ -13,7 +15,7 @@ export function blockedTrackedPaths(paths) {
   });
 }
 
-if (process.argv[1] && import.meta.url === new URL('file://' + process.argv[1].replaceAll('\\', '/')).href) {
+if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   const result = spawnSync('git', ['ls-files', '-z'], {
     encoding: 'utf8',
     maxBuffer: 10 * 1024 * 1024,
