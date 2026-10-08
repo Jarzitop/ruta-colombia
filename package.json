@@ -27,7 +27,8 @@
     "test:private-data-gate": "node scripts/test-private-data-gate.mjs",
     "test:synthetic-schedule": "node --experimental-strip-types scripts/test-synthetic-schedule.mjs",
     "check:preview-data": "node --experimental-strip-types scripts/check-preview-data.mjs",
-    "test:preview-data": "node --experimental-strip-types scripts/test-preview-data.mjs"
+    "test:preview-data": "node --experimental-strip-types scripts/test-preview-data.mjs",
+    "prebuild:apk": "npm run check:private-data && npm run check:preview-data && npm run test:synthetic-schedule && npm run typecheck"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
