@@ -1,0 +1,57 @@
+name: Reportar fallo Android
+description: Fallo observado al usar la APK en un dispositivo Android real
+title: '[Bug] '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: 'No incluyas tokens, contraseñas ni datos privados. Registra solo datos del dispositivo y pasos para reproducir el fallo.'
+  - type: input
+    id: build
+    attributes:
+      label: Enlace o ID de build EAS
+      placeholder: 'https://expo.dev/.../builds/...'
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Dispositivo y versión de Android
+      placeholder: 'Ejemplo: Galaxy A54, Android 15'
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Pasos para reproducir
+      placeholder: '1. Abrir...\n2. Elegir...\n3. Pulsar...'
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Resultado observado
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: dropdown
+    id: network
+    attributes:
+      label: Estado de la conexión
+      options:
+        - Con internet
+        - Sin internet
+        - Ambas
+        - No aplica
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Capturas, datasetVersion y notas
+      description: 'Adjunta una captura cuando sea posible; no incluyas credenciales.'
