@@ -47,3 +47,31 @@ Los comandos comprueban formato y conectividad dentro del **catálogo recibido**
 5. Únicamente entonces considerar el catálogo real como activo o distribuir APK de prueba con esos datos. Mientras tanto, mantener el catálogo sintético, las pruebas unitarias y el esquema offline.
 
 Seguimiento: [issue #14](https://github.com/Jarzitop/ruta-colombia/issues/14) y [issue #4](https://github.com/Jarzitop/ruta-colombia/issues/4).
+
+## Actualización del lote temporal privado — 8 de octubre de 2026
+
+Se recibió el segundo ZIP `Bogota_pilot_001_auditoria(1)(1).zip`, que **sustituye** la versión anterior para la investigación temporal. Conserva `publishable: false`, el patrón largo del catálogo estático y agrega `temporal.json` con dos patrones diferenciados, calendario, excepciones, vínculo `tripId/serviceId/patternId` y todos los eventos de parada.
+
+**Comprobación local independiente del ZIP recibido** (no publicación): todos los checksums listados en `checksums.json` coincidieron. Se verificaron 709 identificadores de viaje únicos, 9.773 eventos, concordancia de `stopId` y secuencia con el patrón asociado y ausencia de regresiones temporales. Hay 556 viajes del patrón largo (221 días hábiles, 185 sábados y 150 domingos/festivos) y 153 de la variante corta en el servicio festivo. Todos los eventos llevan `timepoint: 0`: tiempos aproximados o interpolados, nunca predicciones de llegada en vivo.
+
+El proveedor documenta que el **12 de octubre de 2026** hay 150 viajes del patrón de 14 paradas y 153 del patrón de 13, que termina antes de Universidades. El fin de cada variante se define por el `tripId` y sus `stopTimes`; compartir servicio o forma geométrica no basta. Especificación y vectores aportados en `temporal.md` y `expected-temporal-cases.json` del ZIP privado.
+
+### Incremento técnico del motor, sin activación
+
+Se incorpora `src/gtfs/scheduled.ts`, módulo multiciudad sin rutas hardcodeadas que evalúa la fecha local **del GTFS**, calendario/excepciones, sentido, variante por `tripId`, permisos de abordaje/descenso y hora aproximada de salida **en la parada de abordaje**, no la salida de cabecera. Devuelve como máximo viajes **programados en la muestra**, expresamente no disponibilidad física ni predicción real. Conserva horas GTFS superiores a `24:00:00`. Rechaza datos estructuralmente inválidos y distingue calendario desconocido o fechas fuera del feed.
+
+`scripts/test-scheduled.mjs` contiene pruebas ficticias sobre los casos críticos. `scripts/verify-private-temporal.mjs` permite ejecutar las **16 regresiones** recibidas sobre el ZIP privado, incluyendo comprobación de calendarios, recuentos por variante y búsquedas del motor para los viajes señalados. El resultado CI de las pruebas sintéticas **no equivale** a ejecutar las regresiones privadas; estas últimas se ejecutan fuera de GitHub con los archivos reales.
+
+### Comando para ejecutar contra la extracción privada
+
+Una vez descomprimido el ZIP actualizado **fuera del repositorio público**, desde la carpeta raíz del clon:
+
+```powershell
+npm run verify:private-temporal -- "$HOME\Downloads\ruta-auditoria-privada\data\bogota\pilot-001\temporal.json" "$HOME\Downloads\ruta-auditoria-privada\data\bogota\pilot-001\expected-temporal-cases.json"
+```
+
+El verificador no necesita tokens, servidor ni API. No ejecutar `git add -f` sobre los datos sin confirmar permisos. Los archivos de operación no se publicaron y `src/data/active.ts` permanece sintético.
+
+### Aún bloqueado
+
+El catálogo de 14 paradas sigue estático y la pantalla **no se ha conectado** al motor por fecha. Para activar orientación de pasajeros faltan resolver la reutilización del ZIP específico, la integración validada de ambas variantes y la fecha/hora de servicio, los límites de horarios interpolados, la atribución y la comprobación presencial en Bogotá. El mensaje de licencia sigue siendo **ámbito pendiente de aclaración**, no prohibición demostrada.
