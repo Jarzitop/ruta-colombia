@@ -24,7 +24,8 @@
     "test:scheduled": "node --experimental-strip-types scripts/test-scheduled.mjs",
     "verify:private-temporal": "node --experimental-strip-types scripts/verify-private-temporal.mjs",
     "check:private-data": "node scripts/assert-no-private-data.mjs",
-    "test:private-data-gate": "node scripts/test-private-data-gate.mjs"
+    "test:private-data-gate": "node scripts/test-private-data-gate.mjs",
+    "test:synthetic-schedule": "node --experimental-strip-types scripts/test-synthetic-schedule.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
