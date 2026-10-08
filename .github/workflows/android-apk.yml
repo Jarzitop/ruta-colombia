@@ -38,6 +38,8 @@ jobs:
           npm run validate:data
           npm run test:validator
           npm run test:routing
+          npm run test:planner
+          npm run test:map
           npm run typecheck
       - name: Configurar Expo y EAS
         uses: expo/expo-github-action@v8
