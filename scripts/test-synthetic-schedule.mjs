@@ -54,6 +54,25 @@ const tests = [
   ['fecha imposible se rechaza en el motor', () => {
     assert.equal(query(toGtfsServiceDate('2026-02-30')).status,'invalid-query');
   }],
+  ['rechaza fechas inexistentes antes de activar el botón', () => {
+    assert.equal(toGtfsServiceDate('2026-02-30'), null);
+    assert.equal(toGtfsServiceDate('2026-13-01'), null);
+    assert.equal(toGtfsServiceDate('2026-00-10'), null);
+    assert.equal(toGtfsServiceDate('2026-04-31'), null);
+  }],
+  ['distingue años bisiestos sin timezone del dispositivo', () => {
+    assert.equal(toGtfsServiceDate('2024-02-29'), '20240229');
+    assert.equal(toGtfsServiceDate('2025-02-29'), null);
+  }],
+  ['conserva fecha al cambiar origen sin cambiar el día de servicio', () => {
+    const day = toGtfsServiceDate('2026-10-12');
+    const a = query(day, 'dev-stop-a', 'dev-stop-c');
+    const b = query(day, 'dev-stop-a', 'dev-stop-b');
+    assert.equal(a.status, 'ok');
+    assert.equal(b.status, 'ok');
+    assert.equal(a.candidates.length, 1);
+    assert.equal(b.candidates.length, 2);
+  }],
 ];
 
 let failed = 0;
