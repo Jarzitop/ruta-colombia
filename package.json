@@ -16,7 +16,8 @@
     "test:planner": "node --experimental-strip-types scripts/test-planner.mjs",
     "test:map": "node --experimental-strip-types scripts/test-map.mjs",
     "test:expected-trips": "node --experimental-strip-types scripts/test-expected-trips.mjs",
-    "verify:synthetic-trips": "node --experimental-strip-types scripts/verify-expected-trips.mjs src/data/synthetic/dev.dataset.json src/data/synthetic/expected-trips.json"
+    "verify:synthetic-trips": "node --experimental-strip-types scripts/verify-expected-trips.mjs src/data/synthetic/dev.dataset.json src/data/synthetic/expected-trips.json",
+    "verify:bogota-pilot": "node --experimental-strip-types scripts/verify-bogota-pilot.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
