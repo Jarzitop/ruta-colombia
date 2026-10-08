@@ -50,6 +50,8 @@ jobs:
         run: npm run test:catalog-notice
       - name: Calendario y excepciones GTFS
         run: npm run test:gtfs-calendar
+      - name: Viajes programados y variantes sintéticas
+        run: npm run test:scheduled
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
