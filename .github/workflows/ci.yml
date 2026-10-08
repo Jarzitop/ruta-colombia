@@ -43,6 +43,8 @@ jobs:
         run: |
           npm run test:expected-trips
           npm run verify:synthetic-trips
+      - name: Comprobar primera muestra de Bogotá si existe
+        run: npm run verify:bogota-pilot
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
