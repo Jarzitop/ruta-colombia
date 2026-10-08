@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: '24'
           cache: npm
+      - name: Verificar ausencia de GTFS privado
+        run: |
+          npm run test:private-data-gate
+          npm run check:private-data
       - name: Comprobar EXPO_TOKEN
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
