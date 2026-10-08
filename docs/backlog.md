@@ -74,5 +74,11 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [x] Checksum de los archivos del paquete: sin diferencias; 709 IDs únicos y 9.773 eventos alineados con el patrón; 16/16 casos documentales comprobados independientemente.
 - [x] Motor temporal multiciudad aislado `src/gtfs/scheduled.ts`, con búsqueda por fecha local GTFS y hora aproximada en la parada de abordaje (sin tiempo real ni horario preciso); 22 pruebas sintéticas.
 - [x] CI del módulo temporal y TypeScript verde: https://github.com/Jarzitop/ruta-colombia/actions/runs/37800407700.
-- [ ] Ejecutar `npm run verify:private-temporal` con la segunda extracción privada del ZIP (sin publicar datos) para verificar juntos el motor y los 16 vectores.
+- [x] Ejecutado el verificador del repositorio sobre el segundo ZIP privado: **709 viajes, 9.773 eventos, 16/16 casos aprobados**; identificadores SHA comprobados y datos mantenidos fuera de GitHub.
 - [ ] Resolver licencia aplicable a la revisión concreta, integrar ambas variantes con validación de fecha y realizar pruebas presenciales/Android; issue #14.
+
+## Endurecimiento adicional del motor temporal
+
+- [x] Pruebas de consulta con los datos privados: festivo 12 octubre, 150 programados al terminal largo; 303 a parada compartida, incluidos 153 del patrón corto. No se atribuyen viajes a destinos que la variante corta no atiende.
+- [x] Corregida la aceptación errónea de horas GTFS mal formadas con `arrivalSeconds`/`departureSeconds: null`; se añadieron 3 pruebas sintéticas de regresión.
+- [ ] Mantener la UI en modo ficticio mientras se define la integración temporal segura y la licencia del GTFS. Sin APK nueva ni aprobación Android.
