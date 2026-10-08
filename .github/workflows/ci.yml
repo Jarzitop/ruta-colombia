@@ -1,0 +1,41 @@
+name: CI · TypeScript y datos
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validar MVP sin compilar APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Node 24 + caché npm
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Instalar dependencias bloqueadas
+        run: npm ci
+      - name: Contrato de datos
+        run: npm run validate:data
+      - name: Pruebas del validador
+        run: npm run test:validator
+      - name: Pruebas del motor
+        run: npm run test:routing
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Compatibilidad con Expo
+        run: npm run doctor
