@@ -16,11 +16,24 @@ Node.js >= 22.13, npm y cuenta de Expo/EAS para compilar en la nube.
 npm install
 npm run validate:data
 npm run test:validator
+npm run test:routing
 npm run typecheck
 npm run doctor
 ```
 
 El lockfile `package-lock.json` debe generarse y versionarse desde el entorno local con acceso a npm; este repositorio se inicializó desde el archivo fuente sin lockfile. **No usar `npm ci` hasta incorporarlo.**
+
+## Motor de viajes directos (solo lógica; no conectado a pantallas)
+
+`src/routing/direct.ts` exporta `findDirectItineraries(dataset, { cityId, originStopId, destinationStopId })`. Acepta recorridos solo si existen como un mismo `pattern` documentado con **origen antes de destino**, abordaje y descenso permitidos y paradas en la misma ciudad. No construye el regreso, ni presume caminatas, horarios o tiempos. El estado `no-direct-service` **no significa** que sea imposible viajar con transbordos: esa fase todavía no está implementada.
+
+Pruebas reproducibles con Node >=22.13:
+
+```bash
+npm run test:routing
+```
+
+El conjunto cubre sentido, orden, patrones inversos únicamente explícitos, permisos, referencias inválidas y cobertura. El código del motor fue comprobado en aislamiento con TypeScript y Node 22.16; las verificaciones integradas `npm run typecheck` y Android para este incremento siguen pendientes en el equipo del usuario.
 
 ## APK independiente
 
