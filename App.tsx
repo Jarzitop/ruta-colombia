@@ -1,9 +1,10 @@
 import { useReducer, useState } from 'react';
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { activeDataset } from './src/data/active';
+import { activeDataset, activeScheduledCatalog } from './src/data/active';
 import { describeCatalog } from './src/data/notice';
 import { CatalogPicker, type CatalogOption } from './src/components/CatalogPicker';
+import { ScheduledTripPanel } from './src/components/ScheduledTripPanel';
 import { findDirectItineraries, type DirectItinerary, type DirectSearchResult } from './src/routing/direct';
 import { initialPlannerState, reducePlanner } from './src/planner/state';
 import { TransitMap } from './src/map/TransitMap';
@@ -60,6 +61,7 @@ export default function App() {
       reducePlanner(state, action, dataset),
     initialPlannerState,
   );
+  const [scheduleMode, setScheduleMode] = useState(false);
   const [mapVisible, setMapVisible] = useState(true);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'failed'>('loading');
 
@@ -72,6 +74,11 @@ export default function App() {
     .map((stop) => ({ id: stop.id, label: stop.name }))
     .sort((a, b) => a.label.localeCompare(b.label, 'es'));
 
+  const changeMode = (nextScheduleMode: boolean) => {
+    if (nextScheduleMode === scheduleMode) return;
+    dispatch({ type: 'clear-result' });
+    setScheduleMode(nextScheduleMode);
+  };
   const canCalculate = Boolean(planner.cityId && planner.originStopId && planner.destinationStopId);
   const calculate = () => {
     if (!planner.cityId || !planner.originStopId || !planner.destinationStopId) return;
@@ -85,7 +92,7 @@ export default function App() {
     });
   };
   const itinerary: DirectItinerary | null =
-    planner.result?.status === 'ok' ? planner.result.itineraries[0] ?? null : null;
+    !scheduleMode && planner.result?.status === 'ok' ? planner.result.itineraries[0] ?? null : null;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -101,6 +108,25 @@ export default function App() {
           <Text style={styles.warningBody}>
             {notice.description}
           </Text>
+        </View>
+
+        <View style={styles.modeRow}>
+          <Pressable
+            style={[styles.modeButton, !scheduleMode && styles.modeActive]}
+            accessibilityRole="button"
+            accessibilityState={{ selected: !scheduleMode }}
+            onPress={() => changeMode(false)}
+          >
+            <Text style={[styles.modeLabel, !scheduleMode && styles.modeLabelActive]}>Recorrido directo</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.modeButton, scheduleMode && styles.modeActive]}
+            accessibilityRole="button"
+            accessibilityState={{ selected: scheduleMode }}
+            onPress={() => changeMode(true)}
+          >
+            <Text style={[styles.modeLabel, scheduleMode && styles.modeLabelActive]}>Por fecha de servicio</Text>
+          </Pressable>
         </View>
 
         <View style={styles.form}>
@@ -138,25 +164,35 @@ export default function App() {
               disabled={!planner.cityId}
             />
           </View>
-          <Pressable
+          {!scheduleMode && <Pressable
             style={[styles.calculateButton, !canCalculate && styles.calculateDisabled]}
             disabled={!canCalculate}
             accessibilityRole="button"
             accessibilityLabel="Calcular viaje directo"
             onPress={calculate}
           >
-            <Text style={styles.calculateLabel}>Buscar viaje directo</Text>
-          </Pressable>
+            <Text style={styles.calculateLabel}>Comprobar recorrido directo</Text>
+          </Pressable>}
         </View>
 
-        <View style={styles.tripCard}>
+        <View style={[styles.tripCard, scheduleMode && styles.scheduleCard]}>
           <ScrollView
             nestedScrollEnabled
             style={styles.resultScroll}
             contentContainerStyle={styles.resultScrollContent}
             showsVerticalScrollIndicator
           >
-            <TripResult result={planner.result} />
+            {scheduleMode ? (
+              <ScheduledTripPanel
+                key={String(planner.cityId) + ':' + String(planner.originStopId) + ':' + String(planner.destinationStopId)}
+                schedule={activeScheduledCatalog}
+                originStopId={planner.originStopId}
+                destinationStopId={planner.destinationStopId}
+                stopName={stopName}
+              />
+            ) : (
+              <TripResult result={planner.result} />
+            )}
           </ScrollView>
         </View>
 
@@ -192,6 +228,9 @@ export default function App() {
           {mapState === 'failed' && mapVisible
             ? 'No se pudo dibujar el mapa. El viaje sigue disponible.'
             : 'Verde: origen · naranja: destino. Sin calles ni tiles externos.'}
+          {scheduleMode
+            ? ' El esquema no representa calles ni predicciones en tiempo real.'
+            : ''}
           {itinerary && itinerary.stopIds.length < (dataset.patterns.find((p) => p.id === itinerary.patternId)?.stops.length ?? 0)
             ? ' El tramo parcial no tiene línea de geometría verificada.' : ''}
         </Text>
@@ -213,6 +252,15 @@ const styles = StyleSheet.create({
   warningTitle: { fontSize: 10, fontWeight: '800', color: '#92400E' },
   warningBody: { marginTop: 2, fontSize: 10, lineHeight: 14, color: '#92400E' },
   form: { gap: 6 },
+  modeRow: { flexDirection: 'row', gap: 6 },
+  modeButton: {
+    flex: 1, minHeight: 32, borderRadius: 8, borderWidth: 1,
+    borderColor: '#C7D2FE', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: '#FFFFFF', paddingHorizontal: 5,
+  },
+  modeActive: { backgroundColor: '#5B21B6', borderColor: '#5B21B6' },
+  modeLabel: { color: '#475569', fontSize: 11, fontWeight: '700' },
+  modeLabelActive: { color: '#FFFFFF' },
   fieldsRow: { flexDirection: 'row', alignItems: 'flex-end', gap: 5 },
   swapButton: {
     height: 44, minWidth: 36, backgroundColor: '#EDE9FE', borderRadius: 9,
@@ -230,6 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, backgroundColor: '#FFFFFF', borderWidth: 1,
     borderColor: '#CBD5E1', maxHeight: 156, minHeight: 55,
   },
+  scheduleCard: { maxHeight: 188 },
   resultScroll: { flexGrow: 0 },
   resultScrollContent: { padding: 10 },
   resultDetails: { gap: 3 },
