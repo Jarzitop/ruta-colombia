@@ -132,6 +132,23 @@ const tests=[
     const r=find('20261012','demo-A','demo-C',{departureAtOrAfter:'13:00:00'});
     expected(r,'no-scheduled-trip-in-sample');assert.equal(r.scope,'provided-catalog');
   }],
+  ['rechaza hora de llegada mal escrita aunque segundos sean null',()=>{
+    const data=clone();
+    data.trips[0].stopTimes[0].arrivalTime='no-es-hora';
+    data.trips[0].stopTimes[0].arrivalSeconds=null;
+    expected(find('20261019','demo-A','demo-C',{},data),'invalid-data');
+  }],
+  ['rechaza hora de salida mal escrita aunque segundos sean null',()=>{
+    const data=clone();
+    data.trips[0].stopTimes[0].departureTime='no-es-hora';
+    data.trips[0].stopTimes[0].departureSeconds=null;
+    expected(find('20261019','demo-A','demo-C',{},data),'invalid-data');
+  }],
+  ['rechaza segundos no enteros aunque la hora de texto sea válida',()=>{
+    const data=clone();
+    data.trips[0].stopTimes[0].arrivalSeconds=36000.5;
+    expected(find('20261019','demo-A','demo-C',{},data),'invalid-data');
+  }],
 ];
 
 let failures=0;
