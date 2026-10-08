@@ -42,6 +42,7 @@ jobs:
           npm run test:map
           npm run test:expected-trips
           npm run test:gtfs-calendar
+          npm run test:scheduled
           npm run verify:synthetic-trips
           npm run verify:bogota-pilot
           npm run typecheck
