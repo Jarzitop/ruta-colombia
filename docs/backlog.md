@@ -22,10 +22,10 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 ## Sprint 2 · 12–17 octubre
 
 - [ ] Importador de datos reales.
-- [ ] Motor directo respetando sentido/orden.
-- [ ] Motor con máximo un transbordo explícito.
+- [~] Motor directo `src/routing/direct.ts` implementado; 17/17 pruebas de lógica y `tsc` aislado correctos en Node 22.16. Pendiente `npm run typecheck` del proyecto completo y uso desde interfaz.
+- [ ] Motor con máximo un transbordo explícito (no se infiere caminar ni el regreso).
 - [ ] Ranking: menos transbordos y luego menor caminata documentada.
-- [ ] Estados de no cobertura/no itinerario.
+- [~] Motor directo distingue `not-covered`, `same-stop`, `invalid-data` y `no-direct-service`; falta integrarlo a la interfaz.
 - [ ] Instrucciones y geometría de itinerario.
 
 ## Sprint 3 · 18–22 octubre
