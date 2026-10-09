@@ -36,7 +36,8 @@
     "prebuild:apk:bogota": "npm run check:eas-private-consent && npm run check:private-data && npm run check:bogota:private && npm run typecheck",
     "build:apk:bogota": "npx eas-cli@latest build --platform android --profile bogota-internal",
     "test:private-normalizer": "node --experimental-strip-types scripts/test-private-normalizer.mjs",
-    "check:eas-private-consent": "node scripts/check-eas-private-consent.mjs"
+    "check:eas-private-consent": "node scripts/check-eas-private-consent.mjs",
+    "test:provenance": "node --experimental-strip-types scripts/test-provenance.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
