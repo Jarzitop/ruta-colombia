@@ -12,6 +12,8 @@ import { TransitMap } from './src/map/TransitMap';
 
 const dataset = activeDataset;
 const notice = describeCatalog(dataset);
+const isSyntheticCatalog = dataset.sourceRefs.length > 0 &&
+  dataset.sourceRefs.every((source) => source.kind === 'synthetic');
 
 function stopName(id: string): string {
   return dataset.stops.find((stop) => stop.id === id)?.name ?? 'Parada fuera del catálogo';
@@ -64,7 +66,7 @@ export default function App() {
       reducePlanner(state, action, dataset),
     initialPlannerState,
   );
-  const [scheduleMode, setScheduleMode] = useState(false);
+  const [scheduleMode, setScheduleMode] = useState(!isSyntheticCatalog);
   const [serviceDateText, setServiceDateText] = useState('2026-10-12');
   const [departureText, setDepartureText] = useState('');
   const [selectedScheduledCandidate, setSelectedScheduledCandidate] = useState<ScheduledCandidate | null>(null);
@@ -86,6 +88,8 @@ export default function App() {
     .sort((a, b) => a.label.localeCompare(b.label, 'es'));
 
   const changeMode = (nextScheduleMode: boolean) => {
+    // A dated GTFS sample must never be presented as a timeless service.
+    if (!isSyntheticCatalog && !nextScheduleMode) return;
     if (nextScheduleMode === scheduleMode) return;
     dispatch({ type: 'clear-result' });
     setSelectedScheduledCandidate(null);
@@ -105,6 +109,7 @@ export default function App() {
   };
   const canCalculate = Boolean(planner.cityId && planner.originStopId && planner.destinationStopId);
   const calculate = () => {
+    if (!isSyntheticCatalog) return;
     if (!planner.cityId || !planner.originStopId || !planner.destinationStopId) return;
     dispatch({
       type: 'result',
@@ -136,12 +141,13 @@ export default function App() {
 
         <View style={styles.modeRow}>
           <Pressable
-            style={[styles.modeButton, !scheduleMode && styles.modeActive]}
+            style={[styles.modeButton, !scheduleMode && styles.modeActive, !isSyntheticCatalog && styles.disabled]}
+            disabled={!isSyntheticCatalog}
             accessibilityRole="button"
             accessibilityState={{ selected: !scheduleMode }}
             onPress={() => changeMode(false)}
           >
-            <Text style={[styles.modeLabel, !scheduleMode && styles.modeLabelActive]}>Recorrido directo</Text>
+            <Text style={[styles.modeLabel, !scheduleMode && styles.modeLabelActive]}>{isSyntheticCatalog ? 'Recorrido directo' : 'Sin calendario (desactivado)'}</Text>
           </Pressable>
           <Pressable
             style={[styles.modeButton, scheduleMode && styles.modeActive]}
@@ -188,7 +194,7 @@ export default function App() {
               disabled={!planner.cityId}
             />
           </View>
-          {!scheduleMode && <Pressable
+          {!scheduleMode && isSyntheticCatalog && <Pressable
             style={[styles.calculateButton, !canCalculate && styles.calculateDisabled]}
             disabled={!canCalculate}
             accessibilityRole="button"
@@ -211,6 +217,7 @@ export default function App() {
                 key={String(planner.cityId) + ':' + String(planner.originStopId) + ':' + String(planner.destinationStopId)}
                 schedule={activeScheduledCatalog}
                 catalog={dataset}
+                isSynthetic={isSyntheticCatalog}
                 dateText={serviceDateText}
                 onChangeDateText={(value) => {
                   setServiceDateText(value);
