@@ -103,3 +103,12 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [ ] APK de este incremento: NO solicitada. Está pendiente de que el CI completo quede verde y de definir sesión de pruebas en teléfono real.
 - [ ] En Android: gestos MapLibre, visibilidad de controles en pantalla reducida, consulta de 2 variantes, cambios de fecha, arranque en frío en modo avión y estabilidad; matriz en `docs/testing-android.md`.
 - [ ] GTFS de Bogotá: todavía excluido del repositorio y de la APK; aclarar licencia, vigencia y ensayos internos antes de incorporar datos operativos.
+
+
+## Incremento previo a la segunda APK — 8 octubre, noche
+
+- [x] Filtro opcional de hora mínima de salida en `src/components/ScheduledTripPanel.tsx`, convertido a hora de servicio GTFS sin red ni reloj del dispositivo. Consulta por **hora en parada de abordaje**.
+- [x] Alternativas de viaje programadas seleccionables; `App.tsx` almacena el viaje temporal elegido y limpia la selección en cada cambio de ciudad, parada, fecha, hora o modo.
+- [x] `TransitMap` recibe `highlightedStopIds`: destaca paradas verificadas del segmento elegido y no traza una línea ficticia ni extiende el recorrido corto.
+- [x] Nueva suite `npm run test:service-time` para formato `HH:MM`, umbral inclusivo, comparación desde parada de abordaje, y ausencia de servicio únicamente en la muestra.
+- [ ] Confirmar CI verde para este incremento; la evidencia Android sigue pendiente. Sin compilación APK, GTFS real ni transbordos inventados.
