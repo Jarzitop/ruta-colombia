@@ -4,6 +4,7 @@ import type { TransitDataset, Stop } from '../data/contract';
 import type { DirectItinerary } from '../routing/direct';
 import { boundsForStops } from './viewport';
 import { LOCAL_STYLE } from './offline-style';
+import { visibleStopsForTrip } from './stop-visibility';
 
 // Schematic style contains no remote sources, glyphs, sprites or tiles.
 
@@ -57,9 +58,10 @@ export function TransitMap({
     geometry: { type: 'LineString' as const, coordinates: geometry.coordinates },
   } : null;
 
+  const visibleCityStops = visibleStopsForTrip(cityStops, highlightedStopIds);
   const allStopFeatures = {
     type: 'FeatureCollection' as const,
-    features: cityStops.map((stop) => ({
+    features: visibleCityStops.map((stop) => ({
       type: 'Feature' as const,
       properties: { id: stop.id, name: stop.name },
       geometry: {
