@@ -121,3 +121,17 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [x] Diez pruebas adicionales de instrucciones en `scripts/test-itinerary-steps.mjs` incorporadas al CI y al workflow APK manual.
 - [ ] Verificar ejecución CI completa de estos cambios; **no** afirmar pruebas físicas Android ni estabilidad nativa por inspección de código.
 - [ ] No compilar todavía: continuar con integración controlada y sesión Android conjunta del Sprint 1; no activar GTFS de Bogotá sin autorización aplicable.
+
+## Segunda APK Bogotá real · integración local (8 octubre)
+
+- [x] ZIP privado del 8 de octubre localizado: 709 viajes, 9.773 eventos, dos patrones (14/13), 16 regresiones y 29 checksums sin discrepancias. Datos operativos fuera de GitHub.
+- [x] `scripts/lib/normalize-private-bogota.mjs`: incorpora ambos patrones en `TransitDataset`, conserva fuentes y permisos, reutiliza geometría **solo** cuando la secuencia completa está documentada; no asigna geometría larga al patrón corto.
+- [x] `scripts/install-private-bogota.mjs`: instalador local desde extracción ajena al repo, valida catálogo, calendario y 16 regresiones **antes** de escribir datos privados. Alternativa: overlay privado suministrado en la conversación.
+- [x] En modo real, la app abre directamente búsqueda por fecha/hora y bloquea el cálculo atemporal; presenta advertencia de revisión, fuente, revisión GTFS y vigencia declarada; horarios se muestran como programación aproximada.
+- [x] El mapa esquemático se centra únicamente en el viaje programado seleccionado, y al seleccionar variante corta **oculta** paradas de la larga que no pertenecen al viaje. Sin tiles de red, sin línea de continuación ni calles inventadas.
+- [x] `src/data/private/` y `.easignore` ignorados por Git y bloqueados contra inclusión forzada; el workflow APK público sigue aceptando solamente un catálogo sintético.
+- [x] Perfil EAS `bogota-internal` y comando `npm run build:apk:bogota` con controles previos, consentimiento expreso `RUTA_PRIVATE_EAS_UPLOAD_APPROVED=YES` y exigencia documental de desactivar acceso anónimo a builds internos.
+- [x] Pruebas unitarias sintéticas para normalización, atribución, mapa sin red y límite de paradas de variante.
+- [ ] **NO** se ha compilado ni instalado una segunda APK. No hay sesión Expo autenticada ni SDK Android local accesible desde este entorno; verificar permiso de subida de los dos JSON a EAS y protección del enlace antes de crear un build.
+- [ ] Repetir `npm run check:bogota:private`, `npm run typecheck` y la matriz de pruebas **en el clon privado del usuario**. CI público comprueba el código genérico pero no contiene ni puede inspeccionar el GTFS real.
+- [ ] Completar pruebas físicas de la segunda APK: 12/10 destino común vs Universidades, horas aproximadas, modo avión, gestos MapLibre y fallos del mapa. Ver `docs/internal-bogota-apk.md`.
