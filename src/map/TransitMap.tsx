@@ -35,16 +35,18 @@ export interface TransitMapProps {
   originStopId: string | null;
   destinationStopId: string | null;
   itinerary: DirectItinerary | null;
+  /** Highlight only known stops in the chosen segment; never infer roads. */
+  highlightedStopIds: string[] | null;
   onMapLoaded: () => void;
   onMapFailed: () => void;
 }
 
 export function TransitMap({
   dataset, cityId, originStopId, destinationStopId,
-  itinerary, onMapLoaded, onMapFailed,
+  itinerary, highlightedStopIds, onMapLoaded, onMapFailed,
 }: TransitMapProps) {
   const cityStops = dataset.stops.filter((stop) => !cityId || stop.cityId === cityId);
-  const wanted = itinerary?.stopIds ??
+  const wanted = highlightedStopIds ?? itinerary?.stopIds ??
     [originStopId, destinationStopId].filter((id): id is string => id !== null);
   const focusIds = wanted.length ? wanted : cityStops.map((stop) => stop.id);
   const bounds = boundsForStops(dataset, focusIds);
@@ -70,6 +72,18 @@ export function TransitMap({
     features: cityStops.map((stop) => ({
       type: 'Feature' as const,
       properties: { id: stop.id, name: stop.name },
+      geometry: {
+        type: 'Point' as const,
+        coordinates: [stop.longitude, stop.latitude],
+      },
+    })),
+  };
+  const selectedIds = new Set(highlightedStopIds ?? []);
+  const selectedStopFeatures = {
+    type: 'FeatureCollection' as const,
+    features: cityStops.filter((stop) => selectedIds.has(stop.id)).map((stop) => ({
+      type: 'Feature' as const,
+      properties: { id: stop.id },
       geometry: {
         type: 'Point' as const,
         coordinates: [stop.longitude, stop.latitude],
@@ -131,6 +145,21 @@ export function TransitMap({
             }}
           />
         </GeoJSONSource>
+
+        {selectedStopFeatures.features.length > 0 && (
+          <GeoJSONSource id="chosen-trip-stops" data={selectedStopFeatures}>
+            <Layer
+              id="chosen-trip-markers"
+              type="circle"
+              paint={{
+                'circle-radius': 9,
+                'circle-color': '#DDD6FE',
+                'circle-stroke-color': '#6D28D9',
+                'circle-stroke-width': 2,
+              }}
+            />
+          </GeoJSONSource>
+        )}
 
         {origin && (
           <GeoJSONSource id="trip-origin" data={origin}>
