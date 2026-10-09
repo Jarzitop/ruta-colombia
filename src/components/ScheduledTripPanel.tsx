@@ -10,6 +10,7 @@ import type { TransitDataset } from '../data/contract';
 interface Props {
   schedule: ScheduledCatalog | null;
   catalog: Pick<TransitDataset, 'stops'>;
+  isSynthetic: boolean;
   originStopId: string | null;
   destinationStopId: string | null;
   dateText: string;
@@ -38,7 +39,7 @@ function scheduleTime(raw: string, approximate: boolean): string {
 
 /** Local synthetic schedule only until rights/coverage are reviewed. */
 export function ScheduledTripPanel({
-  schedule, catalog, originStopId, destinationStopId, dateText, onChangeDateText,
+  schedule, catalog, isSynthetic, originStopId, destinationStopId, dateText, onChangeDateText,
   departureText, onChangeDepartureText, selectedTripId, onSelectCandidate, stopName,
 }: Props) {
   const [result, setResult] = useState<ScheduledResult | null>(null);
@@ -82,7 +83,9 @@ export function ScheduledTripPanel({
           style={[styles.button, !ready && styles.buttonDisabled]}
           disabled={!ready}
           accessibilityRole="button"
-          accessibilityLabel="Consultar programación ficticia para la fecha"
+          accessibilityLabel={isSynthetic
+            ? 'Consultar programación ficticia para la fecha'
+            : 'Consultar programación del GTFS en revisión para la fecha'}
           onPress={search}
         >
           <Text style={styles.buttonText}>Consultar</Text>
@@ -106,8 +109,11 @@ export function ScheduledTripPanel({
         />
       </View>
       <Text style={styles.note}>
-        Ejemplo ficticio: 12/10 (dos variantes) o 19/10 (solo la larga).
-        {' '}Los horarios no indican llegada en tiempo real.
+        {isSynthetic
+          ? 'Ejemplo ficticio: 12/10 (dos variantes), 19/10 (larga). No es tiempo real.'
+          : 'Bogotá: muestra GTFS real EN REVISIÓN, no apta como garantía de viaje. '
+            + 'Los horarios son PROGRAMADOS APROXIMADOS, no llegadas en tiempo real. '
+            + 'Los viajes solo cubren el periodo declarado del feed.'}
       </Text>
 
       {dateText.length > 0 && date === null && (
@@ -124,6 +130,7 @@ export function ScheduledTripPanel({
         <View style={styles.result} accessibilityLiveRegion="polite">
           <Text style={styles.title}>
             {result.candidates.length} viaje(s) programado(s) en esta muestra
+            {isSynthetic ? ' ficticia' : ' oficial en revisión'}
           </Text>
           {result.candidates.slice(0, 6).map((candidate, index) => {
             const pattern = schedule?.patterns.find((item) => item.id === candidate.patternId);
