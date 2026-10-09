@@ -3,19 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import type { TransitDataset, Stop } from '../data/contract';
 import type { DirectItinerary } from '../routing/direct';
 import { boundsForStops } from './viewport';
+import { LOCAL_STYLE } from './offline-style';
 
-// Self-contained schematic: zero external sources, fonts or tile requests.
-// A licensed street-map provider can be added separately later.
-const LOCAL_STYLE = {
-  version: 8 as const,
-  name: 'Ruta Colombia - esquema sin conexión',
-  sources: {},
-  layers: [{
-    id: 'offline-background',
-    type: 'background' as const,
-    paint: { 'background-color': '#EFF6FF' },
-  }],
-};
+// Schematic style contains no remote sources, glyphs, sprites or tiles.
 
 function stopMarker(stop: Stop | undefined) {
   if (!stop) return null;
