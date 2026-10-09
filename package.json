@@ -29,7 +29,8 @@
     "check:preview-data": "node --experimental-strip-types scripts/check-preview-data.mjs",
     "test:preview-data": "node --experimental-strip-types scripts/test-preview-data.mjs",
     "prebuild:apk": "npm run check:private-data && npm run check:preview-data && npm run test:synthetic-schedule && npm run typecheck",
-    "test:service-time": "node --experimental-strip-types scripts/test-service-time.mjs"
+    "test:service-time": "node --experimental-strip-types scripts/test-service-time.mjs",
+    "test:itinerary-steps": "node --experimental-strip-types scripts/test-itinerary-steps.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
