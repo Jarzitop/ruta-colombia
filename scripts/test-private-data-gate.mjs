@@ -22,6 +22,15 @@ const tests = [
       blockedTrackedPaths(['data\\bogota\\pilot-001\\temporal.json']),
       ['data\\bogota\\pilot-001\\temporal.json'],
     )],
+  ['bloquea el overlay real incluso si se fuerza git add', () =>
+    assert.deepEqual(
+      blockedTrackedPaths([
+        'src/data/private/bogota.dataset.json',
+        'src/data/private/bogota.temporal.json',
+        '.easignore',
+      ]),
+      ['src/data/private/bogota.dataset.json','src/data/private/bogota.temporal.json','.easignore'],
+    )],
   ['permite código, documentación y fixture ficticio', () =>
     assert.deepEqual(blockedTrackedPaths([
       'src/gtfs/scheduled.ts',
