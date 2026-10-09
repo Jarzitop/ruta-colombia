@@ -3,6 +3,7 @@ import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, useWindowDimensi
 import { StatusBar } from 'expo-status-bar';
 import { activeDataset, activeScheduledCatalog } from './src/data/active';
 import { describeCatalog } from './src/data/notice';
+import { catalogProvenance } from './src/data/provenance';
 import { CatalogPicker, type CatalogOption } from './src/components/CatalogPicker';
 import { ScheduledTripPanel } from './src/components/ScheduledTripPanel';
 import type { ScheduledCandidate } from './src/gtfs/scheduled';
@@ -12,6 +13,7 @@ import { TransitMap } from './src/map/TransitMap';
 
 const dataset = activeDataset;
 const notice = describeCatalog(dataset);
+const provenance = catalogProvenance(dataset, activeScheduledCatalog);
 const isSyntheticCatalog = dataset.sourceRefs.length > 0 &&
   dataset.sourceRefs.every((source) => source.kind === 'synthetic');
 
@@ -139,6 +141,9 @@ export default function App() {
           </Text>
         </View>
 
+        {provenance && (
+          <Text style={styles.provenanceText}>{provenance}</Text>
+        )}
         <View style={styles.modeRow}>
           <Pressable
             style={[styles.modeButton, !scheduleMode && styles.modeActive, !isSyntheticCatalog && styles.disabled]}
@@ -316,6 +321,7 @@ const styles = StyleSheet.create({
   warningTitle: { fontSize: 10, fontWeight: '800', color: '#92400E' },
   warningBody: { marginTop: 2, fontSize: 10, lineHeight: 14, color: '#92400E' },
   form: { gap: 6 },
+  provenanceText: { fontSize: 10, color: '#475569', lineHeight: 13 },
   modeRow: { flexDirection: 'row', gap: 6 },
   modeButton: {
     flex: 1, minHeight: 32, borderRadius: 8, borderWidth: 1,
