@@ -66,6 +66,8 @@ jobs:
         run: npm run test:service-time
       - name: Instrucciones de itinerarios
         run: npm run test:itinerary-steps
+      - name: Normalización de variantes GTFS para prueba interna
+        run: npm run test:private-normalizer
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
