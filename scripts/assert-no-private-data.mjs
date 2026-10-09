@@ -10,6 +10,8 @@ export function blockedTrackedPaths(paths) {
   return paths.filter((path) => {
     const normalized = path.replaceAll('\\', '/');
     return normalized.startsWith('data/bogota/pilot-001/') ||
+      normalized.startsWith('src/data/private/') ||
+      normalized === '.easignore' ||
       normalized.startsWith('audit-work/') ||
       /(^|\/)(GTFS_\d{8}|Bogota_pilot_[^/]*)\.zip$/i.test(normalized);
   });
