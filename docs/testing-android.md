@@ -53,10 +53,22 @@ Esta lista se ejecutará después de agrupar los cambios de interfaz, selección
 13. **Arranque en frío en modo avión:** cerrar la app completamente, activar modo avión, volver a abrir y seleccionar/calcular. No debe intentar cargar tiles remotos; el mapa esquemático, las paradas y las instrucciones deben seguir presentes.
 14. Cualquier fallo de render nativo se reporta con captura, pasos y dispositivo; no marcar «corregido» solo por usar `androidView="texture"`.
 
-## Cuando llegue la muestra real de Bogotá
+## Segunda APK interna: datos reales de Bogotá (pendiente de ejecutar)
 
-15. Comprobar cada viaje del archivo `expected-trips.json` contra los IDs y recorridos documentados.
-16. Registrar al menos un caso fuera de cobertura y uno sin directo. No extrapolar el conjunto de la muestra a todo Bogotá.
-17. Verificar en persona una selección apropiada del subconjunto cuando sea posible.
+**No se puede aprobar por CI ni distribuir a terceros.** Seguir el procedimiento privado de [`internal-bogota-apk.md`](internal-bogota-apk.md). Registrar nombre/modelo Android, versión OS, commit, versión GTFS, ID EAS y capturas de cada fallo.
+
+15. Inicio: aparece «DATOS EN REVISIÓN — NO APTOS PARA VIAJAR», la atribución a TRANSMILENIO S.A. y el periodo programado del GTFS. Nunca el indicador ficticio de Sandbox.
+16. «Recorrido directo» sin fecha debe estar deshabilitado. Elegir Bogotá y consulta por fecha y hora.
+17. **12/10/2026:** origen **Portal Eldorado T-6B**, destino **Centro Memoria**. Sin filtro de hora se esperan servicios documentados de ambas variantes. El resultado debe distinguir la variante de 13 paradas de la de 14 y calificar todos los horarios interpolados como aproximados.
+18. Cambiar solo el destino a **Universidades**. Solo los viajes **de 14 paradas** llegan al destino. No ofrecer un viaje de 13 paradas aunque comparta `service_id` o `shape_id`.
+19. Seleccionar un viaje que termine en Centro Memoria. El mapa solo resalta y representa su secuencia (13 paradas); **no** dibuja la continuación de la variante larga ni muestra Universidades como parada de ese viaje.
+20. Cambiar fecha a un día ordinario, y luego a un día fuera del feed (`2027-01-01`). Comprobar que cambian los viajes cubiertos y se distingue «fuera del periodo» de «no hay viaje en esta muestra».
+21. Introducir hora mínima de salida y verificar que se compara con la **hora de abordaje**, no con la cabecera del patrón. No interpretar una hora programada como llegada en vivo.
+22. Ver instrucciones de una alternativa: origen, parada(s) intermedias verificadas, destino y horas aproximadamente programadas, sin caminar/tranbordos inventados.
+23. Cerrar completamente la aplicación, activar modo avión y volver a abrir. Repetir selección, fecha, itinerario e instrucciones **sin conexión**. El estilo esquemático actual carece de fuentes de red; aun así, MapLibre debe comprobarse realmente en el dispositivo.
+24. Zoom con pinza, desplazamiento y doble toque, mapa visible/oculto y recuperación tras fallo. Registrar pantallas negras o errores nativos.
+25. Validar presencialmente el recorrido elegido cuando sea seguro y factible. La versión y periodo declarados del feed no garantizan que el servicio esté operando.
+
+La APK de integración real **todavía no ha sido compilada ni instalada**. No publicar el enlace EAS ni el binario en GitHub.
 
 No confirmar disponibilidad de mapa de calles offline: solo el esquema local funciona sin red; un futuro proveedor de calles requerirá licencia y pruebas independientes.
