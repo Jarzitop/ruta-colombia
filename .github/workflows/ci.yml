@@ -62,6 +62,8 @@ jobs:
         run: npm run test:scheduled
       - name: Consulta por fecha en la interfaz ficticia
         run: npm run test:synthetic-schedule
+      - name: Filtro de hora de salida en consulta local
+        run: npm run test:service-time
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
