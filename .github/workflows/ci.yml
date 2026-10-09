@@ -64,6 +64,8 @@ jobs:
         run: npm run test:synthetic-schedule
       - name: Filtro de hora de salida en consulta local
         run: npm run test:service-time
+      - name: Instrucciones de itinerarios
+        run: npm run test:itinerary-steps
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
