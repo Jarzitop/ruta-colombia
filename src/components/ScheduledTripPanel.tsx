@@ -4,9 +4,12 @@ import type { ScheduledCandidate, ScheduledCatalog, ScheduledResult } from '../g
 import { findScheduledDirectTrips } from '../gtfs/scheduled';
 import { toGtfsServiceDate } from '../planner/service-date';
 import { toGtfsDepartureTime } from '../planner/service-time';
+import { buildScheduledSteps } from '../planner/itinerary-steps';
+import type { TransitDataset } from '../data/contract';
 
 interface Props {
   schedule: ScheduledCatalog | null;
+  catalog: Pick<TransitDataset, 'stops'>;
   originStopId: string | null;
   destinationStopId: string | null;
   dateText: string;
@@ -35,7 +38,7 @@ function scheduleTime(raw: string, approximate: boolean): string {
 
 /** Local synthetic schedule only until rights/coverage are reviewed. */
 export function ScheduledTripPanel({
-  schedule, originStopId, destinationStopId, dateText, onChangeDateText,
+  schedule, catalog, originStopId, destinationStopId, dateText, onChangeDateText,
   departureText, onChangeDepartureText, selectedTripId, onSelectCandidate, stopName,
 }: Props) {
   const [result, setResult] = useState<ScheduledResult | null>(null);
@@ -144,11 +147,23 @@ export function ScheduledTripPanel({
                   Descenso en {stopName(candidate.alightingStopId)}. Llegada{' '}
                   {scheduleTime(candidate.scheduledAlightArrival, candidate.alightingTimeApproximate)}.
                 </Text>
-                <Text style={styles.selectHint}>
-                  {selectedTripId === candidate.tripId
-                    ? 'Paradas resaltadas en el mapa'
-                    : 'Toca para mostrar sus paradas en el mapa'}
-                </Text>
+                {selectedTripId === candidate.tripId ? (() => {
+                  const directions = buildScheduledSteps(candidate, catalog);
+                  return directions.status === 'ok' ? (
+                    <View style={styles.instructions}>
+                      <Text style={styles.candidateTitle}>Instrucciones del viaje seleccionado</Text>
+                      {directions.steps.map((step, stepIndex) => (
+                        <Text key={stepIndex} style={styles.message}>{step}</Text>
+                      ))}
+                      <Text style={styles.disclaimer}>{directions.notice}</Text>
+                      <Text style={styles.selectHint}>Paradas resaltadas en el mapa.</Text>
+                    </View>
+                  ) : (
+                    <Text style={styles.error}>No se pueden mostrar instrucciones: {directions.notice}</Text>
+                  );
+                })() : (
+                  <Text style={styles.selectHint}>Toca para ver las paradas y las instrucciones.</Text>
+                )}
               </Pressable>
             );
           })}
@@ -200,6 +215,7 @@ const styles = StyleSheet.create({
     padding: 8, gap: 3, backgroundColor: '#FAF5FF',
   },
   selectedCandidate: { borderColor: '#5B21B6', borderWidth: 2 },
+  instructions: { borderTopWidth: 1, borderColor: '#DDD6FE', paddingTop: 7, gap: 4 },
   selectHint: { color: '#5B21B6', fontSize: 11, fontWeight: '700' },
   candidateTitle: { color: '#4C1D95', fontWeight: '800', fontSize: 12 },
   title: { color: '#0F172A', fontSize: 13, fontWeight: '800' },
