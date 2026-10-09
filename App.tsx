@@ -70,6 +70,11 @@ export default function App() {
   const [selectedScheduledCandidate, setSelectedScheduledCandidate] = useState<ScheduledCandidate | null>(null);
   const [mapVisible, setMapVisible] = useState(() => screenHeight >= 700);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'failed'>('loading');
+  const [mapAttempt, setMapAttempt] = useState(0);
+  const retryMap = () => {
+    setMapState('loading');
+    setMapAttempt((value) => value + 1);
+  };
 
   const cities: CatalogOption[] = dataset.cities.map((city) => ({
     id: city.id,
@@ -205,6 +210,7 @@ export default function App() {
               <ScheduledTripPanel
                 key={String(planner.cityId) + ':' + String(planner.originStopId) + ':' + String(planner.destinationStopId)}
                 schedule={activeScheduledCatalog}
+                catalog={dataset}
                 dateText={serviceDateText}
                 onChangeDateText={(value) => {
                   setServiceDateText(value);
@@ -242,7 +248,23 @@ export default function App() {
 
         {mapVisible ? (
           <View style={styles.mapArea}>
-            <TransitMap
+            {mapState === 'failed' ? (
+              <View style={styles.mapFailure} accessibilityLiveRegion="polite">
+                <Text style={styles.resultTitle}>No se pudo mostrar el esquema de paradas</Text>
+                <Text style={styles.resultText}>
+                  El cálculo y las instrucciones siguen disponibles sin el mapa.
+                </Text>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Reintentar carga del mapa"
+                  style={styles.retryButton}
+                  onPress={retryMap}
+                >
+                  <Text style={styles.retryLabel}>Reintentar mapa</Text>
+                </Pressable>
+              </View>
+            ) : <TransitMap
+              key={mapAttempt}
               dataset={dataset}
               cityId={planner.cityId}
               originStopId={planner.originStopId}
@@ -251,7 +273,7 @@ export default function App() {
               highlightedStopIds={scheduleMode ? selectedScheduledCandidate?.stopIds ?? null : null}
               onMapLoaded={() => setMapState('ready')}
               onMapFailed={() => setMapState('failed')}
-            />
+            />}
           </View>
         ) : (
           <View style={styles.mapHidden}>
@@ -325,6 +347,16 @@ const styles = StyleSheet.create({
   mapTitle: { flexShrink: 1, fontSize: 11, fontWeight: '700', color: '#334155' },
   mapToggle: { fontSize: 11, color: '#5B21B6', fontWeight: '700' },
   mapArea: { flex: 1, minHeight: 120 },
+  mapFailure: {
+    flex: 1, minHeight: 120, justifyContent: 'center', alignItems: 'center',
+    borderRadius: 12, borderWidth: 1, borderColor: '#CBD5E1',
+    backgroundColor: '#EFF6FF', padding: 12, gap: 6,
+  },
+  retryButton: {
+    backgroundColor: '#5B21B6', borderRadius: 8, minHeight: 40,
+    justifyContent: 'center', paddingHorizontal: 16,
+  },
+  retryLabel: { color: '#FFFFFF', fontWeight: '700', fontSize: 12 },
   mapHidden: {
     minHeight: 54, justifyContent: 'center', padding: 12,
     borderRadius: 12, backgroundColor: '#E2E8F0',
