@@ -53,6 +53,7 @@ jobs:
           npm run test:scheduled
           npm run test:synthetic-schedule
           npm run test:service-time
+          npm run test:itinerary-steps
           npm run verify:synthetic-trips
           npm run verify:bogota-pilot
           npm run typecheck
