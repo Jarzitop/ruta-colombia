@@ -16,3 +16,8 @@ npm-debug.log*
 /audit-work/
 /GTFS_*.zip
 /Bogota_pilot_*.zip
+
+# Archivo local para ensayos internos; nunca subir a GitHub.
+/src/data/private/
+/.easignore
+/private-bogota-build/
