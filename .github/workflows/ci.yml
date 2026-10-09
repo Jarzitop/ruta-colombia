@@ -70,6 +70,8 @@ jobs:
         run: npm run test:private-normalizer
       - name: Procedencia y revisión del GTFS
         run: npm run test:provenance
+      - name: Mapa sin fuentes remotas
+        run: npm run test:map-offline
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
