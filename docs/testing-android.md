@@ -26,6 +26,11 @@ Esta lista se ejecutará después de agrupar los cambios de interfaz, selección
 - [ ] Alternar entre **Recorrido directo** y **Por fecha de servicio** sin mostrar resultados del modo anterior.
 - [ ] Elegir DEV Alfa → DEV Beta y fecha `2026-10-12`: deben aparecer **dos opciones ficticias diferenciadas**, cada una con su parada de abordaje, salida y llegada programadas aproximadas.
 - [ ] Elegir DEV Alfa → DEV Gamma el mismo día: solo la **variante larga** ficticia atiende ese destino.
+- [ ] Dejar la hora mínima vacía: aparecen las dos opciones hacia DEV Beta. Introducir `10:02`: queda solo la opción corta ficticia a las 10:03; introducir `10:03`: sigue siendo válida (umbral inclusivo).
+- [ ] Introducir `10:60`, `ahora` o `10:20:00`: se informa formato inválido y se bloquea la consulta; no aparece un resultado antiguo.
+- [ ] Elegir una opción ficticia; en el mapa solo deben resaltarse sus paradas, con origen verde/destino naranja. No se dibuja una línea de calles ni se atribuye la geometría de la variante larga a la corta.
+- [ ] En una pantalla pequeña, seleccionar una opción mientras el mapa está oculto: debe abrirse mediante el control y mostrar las paradas. Volver al modo directo y confirmar que desaparece el resaltado de la opción temporal.
+- [ ] Cambiar fecha, hora, ciudad o parada tras elegir una opción: se limpia la selección del viaje anterior. Probar varios cambios consecutivos.
 - [ ] Cambiar a `2026-10-19`: la variante de servicio especial desaparece y se conserva solo la programada para día ordinario dentro del fixture.
 - [ ] Elegir fecha fuera del intervalo `2026-10-01` a `2026-10-31`: debe informar falta de cobertura temporal, no ausencia de buses.
 - [ ] Probar `2026-02-30` (fecha inválida), `2025-02-29` (no bisiesto) y un formato distinto de `AAAA-MM-DD`: debe aparecer un aviso de fecha inválida y deshabilitarse la consulta.
