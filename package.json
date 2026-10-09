@@ -38,7 +38,8 @@
     "test:private-normalizer": "node --experimental-strip-types scripts/test-private-normalizer.mjs",
     "check:eas-private-consent": "node scripts/check-eas-private-consent.mjs",
     "test:provenance": "node --experimental-strip-types scripts/test-provenance.mjs",
-    "test:map-offline": "node --experimental-strip-types scripts/test-map-offline.mjs"
+    "test:map-offline": "node --experimental-strip-types scripts/test-map-offline.mjs",
+    "test:map-stop-visibility": "node --experimental-strip-types scripts/test-map-stop-visibility.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
