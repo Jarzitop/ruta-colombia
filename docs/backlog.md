@@ -112,3 +112,12 @@ Leyenda: `[x]` implementado con evidencia local, `[~]` implementado pero pendien
 - [x] `TransitMap` recibe `highlightedStopIds`: destaca paradas verificadas del segmento elegido y no traza una línea ficticia ni extiende el recorrido corto.
 - [x] Nueva suite `npm run test:service-time` para formato `HH:MM`, umbral inclusivo, comparación desde parada de abordaje, y ausencia de servicio únicamente en la muestra.
 - [ ] Confirmar CI verde para este incremento; la evidencia Android sigue pendiente. Sin compilación APK, GTFS real ni transbordos inventados.
+
+## Cierre de flujo directo programado — incremento adicional 8 octubre
+
+- [x] `src/planner/itinerary-steps.ts` construye instrucciones desde la secuencia del viaje seleccionado: abordaje, paradas intermedias, descenso, tiempos de salida/llegada cualificados como programados y aproximados si `timepoint=0`. Rechaza datos incompletos y paradas ajenas al catálogo; no infiere calles ni transbordos.
+- [x] `ScheduledTripPanel` muestra las instrucciones al seleccionar una alternativa; solo usa el calendario ficticio autorizado del fixture.
+- [x] `App.tsx` presenta una alternativa de recuperación cuando MapLibre informa un fallo, mantiene la consulta local disponible y ofrece botón de reintentar el renderizado.
+- [x] Diez pruebas adicionales de instrucciones en `scripts/test-itinerary-steps.mjs` incorporadas al CI y al workflow APK manual.
+- [ ] Verificar ejecución CI completa de estos cambios; **no** afirmar pruebas físicas Android ni estabilidad nativa por inspección de código.
+- [ ] No compilar todavía: continuar con integración controlada y sesión Android conjunta del Sprint 1; no activar GTFS de Bogotá sin autorización aplicable.
