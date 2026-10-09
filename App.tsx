@@ -5,6 +5,7 @@ import { activeDataset, activeScheduledCatalog } from './src/data/active';
 import { describeCatalog } from './src/data/notice';
 import { CatalogPicker, type CatalogOption } from './src/components/CatalogPicker';
 import { ScheduledTripPanel } from './src/components/ScheduledTripPanel';
+import type { ScheduledCandidate } from './src/gtfs/scheduled';
 import { findDirectItineraries, type DirectItinerary, type DirectSearchResult } from './src/routing/direct';
 import { initialPlannerState, reducePlanner } from './src/planner/state';
 import { TransitMap } from './src/map/TransitMap';
@@ -65,6 +66,8 @@ export default function App() {
   );
   const [scheduleMode, setScheduleMode] = useState(false);
   const [serviceDateText, setServiceDateText] = useState('2026-10-12');
+  const [departureText, setDepartureText] = useState('');
+  const [selectedScheduledCandidate, setSelectedScheduledCandidate] = useState<ScheduledCandidate | null>(null);
   const [mapVisible, setMapVisible] = useState(() => screenHeight >= 700);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'failed'>('loading');
 
@@ -80,7 +83,20 @@ export default function App() {
   const changeMode = (nextScheduleMode: boolean) => {
     if (nextScheduleMode === scheduleMode) return;
     dispatch({ type: 'clear-result' });
+    setSelectedScheduledCandidate(null);
     setScheduleMode(nextScheduleMode);
+  };
+  const chooseStop = (type: 'origin' | 'destination', id: string) => {
+    setSelectedScheduledCandidate(null);
+    dispatch({ type, id });
+  };
+  const chooseCity = (id: string) => {
+    setSelectedScheduledCandidate(null);
+    dispatch({ type: 'city', id });
+  };
+  const swapStops = () => {
+    setSelectedScheduledCandidate(null);
+    dispatch({ type: 'swap' });
   };
   const canCalculate = Boolean(planner.cityId && planner.originStopId && planner.destinationStopId);
   const calculate = () => {
@@ -138,7 +154,7 @@ export default function App() {
             placeholder="Selecciona una ciudad"
             selectedId={planner.cityId}
             options={cities}
-            onSelect={(id) => dispatch({ type: 'city', id })}
+            onSelect={chooseCity}
           />
           <View style={styles.fieldsRow}>
             <CatalogPicker
@@ -146,7 +162,7 @@ export default function App() {
               placeholder="Parada de origen"
               selectedId={planner.originStopId}
               options={stops}
-              onSelect={(id) => dispatch({ type: 'origin', id })}
+              onSelect={(id) => chooseStop('origin', id)}
               disabled={!planner.cityId}
             />
             <Pressable
@@ -154,7 +170,7 @@ export default function App() {
               disabled={!planner.originStopId || !planner.destinationStopId}
               accessibilityLabel="Intercambiar origen y destino"
               accessibilityRole="button"
-              onPress={() => dispatch({ type: 'swap' })}
+              onPress={swapStops}
             >
               <Text style={styles.swapLabel}>⇄</Text>
             </Pressable>
@@ -163,7 +179,7 @@ export default function App() {
               placeholder="Parada de destino"
               selectedId={planner.destinationStopId}
               options={stops}
-              onSelect={(id) => dispatch({ type: 'destination', id })}
+              onSelect={(id) => chooseStop('destination', id)}
               disabled={!planner.cityId}
             />
           </View>
@@ -190,7 +206,20 @@ export default function App() {
                 key={String(planner.cityId) + ':' + String(planner.originStopId) + ':' + String(planner.destinationStopId)}
                 schedule={activeScheduledCatalog}
                 dateText={serviceDateText}
-                onChangeDateText={setServiceDateText}
+                onChangeDateText={(value) => {
+                  setServiceDateText(value);
+                  setSelectedScheduledCandidate(null);
+                }}
+                departureText={departureText}
+                onChangeDepartureText={(value) => {
+                  setDepartureText(value);
+                  setSelectedScheduledCandidate(null);
+                }}
+                selectedTripId={selectedScheduledCandidate?.tripId ?? null}
+                onSelectCandidate={(candidate) => {
+                  setSelectedScheduledCandidate(candidate);
+                  if (candidate) setMapVisible(true);
+                }}
                 originStopId={planner.originStopId}
                 destinationStopId={planner.destinationStopId}
                 stopName={stopName}
@@ -219,6 +248,7 @@ export default function App() {
               originStopId={planner.originStopId}
               destinationStopId={planner.destinationStopId}
               itinerary={itinerary}
+              highlightedStopIds={scheduleMode ? selectedScheduledCandidate?.stopIds ?? null : null}
               onMapLoaded={() => setMapState('ready')}
               onMapFailed={() => setMapState('failed')}
             />
