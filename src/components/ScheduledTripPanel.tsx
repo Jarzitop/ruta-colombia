@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import type { ScheduledCatalog, ScheduledResult } from '../gtfs/scheduled';
+import type { ScheduledCandidate, ScheduledCatalog, ScheduledResult } from '../gtfs/scheduled';
 import { findScheduledDirectTrips } from '../gtfs/scheduled';
 import { toGtfsServiceDate } from '../planner/service-date';
+import { toGtfsDepartureTime } from '../planner/service-time';
 
 interface Props {
   schedule: ScheduledCatalog | null;
@@ -10,6 +11,10 @@ interface Props {
   destinationStopId: string | null;
   dateText: string;
   onChangeDateText: (value: string) => void;
+  departureText: string;
+  onChangeDepartureText: (value: string) => void;
+  selectedTripId: string | null;
+  onSelectCandidate: (candidate: ScheduledCandidate | null) => void;
   stopName: (id: string) => string;
 }
 
@@ -30,19 +35,23 @@ function scheduleTime(raw: string, approximate: boolean): string {
 
 /** Local synthetic schedule only until rights/coverage are reviewed. */
 export function ScheduledTripPanel({
-  schedule, originStopId, destinationStopId, dateText, onChangeDateText, stopName,
+  schedule, originStopId, destinationStopId, dateText, onChangeDateText,
+  departureText, onChangeDepartureText, selectedTripId, onSelectCandidate, stopName,
 }: Props) {
   const [result, setResult] = useState<ScheduledResult | null>(null);
   const date = toGtfsServiceDate(dateText);
+  const departure = toGtfsDepartureTime(departureText);
   const ready = schedule !== null && originStopId !== null &&
-    destinationStopId !== null && date !== null;
+    destinationStopId !== null && date !== null && departure !== null;
 
   const search = () => {
     if (!ready || !date || !schedule || !originStopId || !destinationStopId) return;
+    onSelectCandidate(null);
     setResult(findScheduledDirectTrips(schedule, {
       serviceDate: date,
       originStopId,
       destinationStopId,
+      ...(departure ? { departureAtOrAfter: departure } : {}),
     }));
   };
 
@@ -56,6 +65,7 @@ export function ScheduledTripPanel({
             value={dateText}
             onChangeText={(value) => {
               onChangeDateText(value);
+              onSelectCandidate(null);
               setResult(null);
             }}
             keyboardType="numbers-and-punctuation"
@@ -75,6 +85,23 @@ export function ScheduledTripPanel({
           <Text style={styles.buttonText}>Consultar</Text>
         </Pressable>
       </View>
+      <View style={styles.dateField}>
+        <Text style={styles.label}>Salida desde (opcional)</Text>
+        <TextInput
+          style={styles.input}
+          value={departureText}
+          onChangeText={(value) => {
+            onChangeDepartureText(value);
+            onSelectCandidate(null);
+            setResult(null);
+          }}
+          placeholder="HH:MM, por ejemplo 10:02"
+          accessibilityLabel="Hora mínima programada de salida, hora y minutos"
+          keyboardType="numbers-and-punctuation"
+          maxLength={6}
+          returnKeyType="done"
+        />
+      </View>
       <Text style={styles.note}>
         Ejemplo ficticio: 12/10 (dos variantes) o 19/10 (solo la larga).
         {' '}Los horarios no indican llegada en tiempo real.
@@ -82,6 +109,9 @@ export function ScheduledTripPanel({
 
       {dateText.length > 0 && date === null && (
         <Text style={styles.error}>Fecha inválida. Introduce una fecha real: AAAA-MM-DD.</Text>
+      )}
+      {departure !== null ? null : (
+        <Text style={styles.error}>Hora inválida. Usa HH:MM, por ejemplo 10:02.</Text>
       )}
       {schedule === null && (
         <Text style={styles.message}>No existe un calendario compatible con el catálogo seleccionado.</Text>
@@ -95,7 +125,14 @@ export function ScheduledTripPanel({
           {result.candidates.slice(0, 6).map((candidate, index) => {
             const pattern = schedule?.patterns.find((item) => item.id === candidate.patternId);
             return (
-              <View key={candidate.tripId} style={styles.candidate}>
+              <Pressable
+                key={candidate.tripId}
+                style={[styles.candidate, selectedTripId === candidate.tripId && styles.selectedCandidate]}
+                accessibilityRole="button"
+                accessibilityState={{ selected: selectedTripId === candidate.tripId }}
+                accessibilityLabel={'Ver en mapa la opción ' + (index + 1) + ', ' + candidate.scheduledBoardDeparture}
+                onPress={() => onSelectCandidate(candidate)}
+              >
                 <Text style={styles.candidateTitle}>
                   Opción {index + 1} · Variante de {pattern?.stops.length ?? '?'} paradas
                 </Text>
@@ -107,7 +144,12 @@ export function ScheduledTripPanel({
                   Descenso en {stopName(candidate.alightingStopId)}. Llegada{' '}
                   {scheduleTime(candidate.scheduledAlightArrival, candidate.alightingTimeApproximate)}.
                 </Text>
-              </View>
+                <Text style={styles.selectHint}>
+                  {selectedTripId === candidate.tripId
+                    ? 'Paradas resaltadas en el mapa'
+                    : 'Toca para mostrar sus paradas en el mapa'}
+                </Text>
+              </Pressable>
             );
           })}
           {result.candidates.length > 6 && (
@@ -157,6 +199,8 @@ const styles = StyleSheet.create({
     borderRadius: 8, borderWidth: 1, borderColor: '#DDD6FE',
     padding: 8, gap: 3, backgroundColor: '#FAF5FF',
   },
+  selectedCandidate: { borderColor: '#5B21B6', borderWidth: 2 },
+  selectHint: { color: '#5B21B6', fontSize: 11, fontWeight: '700' },
   candidateTitle: { color: '#4C1D95', fontWeight: '800', fontSize: 12 },
   title: { color: '#0F172A', fontSize: 13, fontWeight: '800' },
   message: { color: '#334155', fontSize: 12, lineHeight: 17 },
