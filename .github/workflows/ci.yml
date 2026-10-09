@@ -72,6 +72,8 @@ jobs:
         run: npm run test:provenance
       - name: Mapa sin fuentes remotas
         run: npm run test:map-offline
+      - name: No extender mapa de variante corta
+        run: npm run test:map-stop-visibility
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
