@@ -39,6 +39,12 @@ La interfaz está en `App.tsx`, con los selectores del catálogo en `src/compone
 
 La interfaz permite alternar entre **comprobar la conectividad de un recorrido directo** y **consultar programación por fecha**. El segundo modo usa únicamente un calendario **ficticio**, con dos variantes de prueba, una fecha elegida manualmente y resultados cuya salida y llegada se identifican como **aproximadas, no en tiempo real**. El catálogo de Bogotá recibido para auditoría **no está incorporado a la aplicación** y permanece fuera de este repositorio público mientras se aclara su licencia concreta. La [decisión sobre licencia y vigencia](docs/bogota-license-and-service-decision.md) y las [pruebas Android pendientes](docs/testing-android.md) registran los límites de este incremento.
 
+## Ensayo con datos reales de Bogotá (sin publicarlos en GitHub)
+
+La primera integración del GTFS revisado de Bogotá utiliza un **overlay local no publicable** y una ruta de build separada. Incluye las variantes de 14/13 paradas, calendario, excepciones y horas **programadas aproximadas**; no ofrece la búsqueda sin calendario. El código y las pruebas genéricas sí están versionados; el GTFS auditado **no**.
+
+**Procedimiento completo, requisitos de seguridad y comandos Windows:** [`docs/internal-bogota-apk.md`](docs/internal-bogota-apk.md). La creación de una APK de Bogotá requiere autorización explícita para subir dos JSON derivados a Expo EAS y acceso autenticado para enlaces internos. El workflow manual de APK en GitHub continúa exclusivamente sintético.
+
 ## Compilar para Android
 
 El proyecto utiliza **EAS Build** para producir una APK que se pueda instalar y abrir en un teléfono sin mantener el computador conectado. Hace falta una cuenta de Expo con acceso al proyecto; la configuración de EAS ya está asociada a este repositorio.
