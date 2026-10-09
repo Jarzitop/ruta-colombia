@@ -30,7 +30,11 @@
     "test:preview-data": "node --experimental-strip-types scripts/test-preview-data.mjs",
     "prebuild:apk": "npm run check:private-data && npm run check:preview-data && npm run test:synthetic-schedule && npm run typecheck",
     "test:service-time": "node --experimental-strip-types scripts/test-service-time.mjs",
-    "test:itinerary-steps": "node --experimental-strip-types scripts/test-itinerary-steps.mjs"
+    "test:itinerary-steps": "node --experimental-strip-types scripts/test-itinerary-steps.mjs",
+    "install:bogota:private": "node --experimental-strip-types scripts/install-private-bogota.mjs",
+    "check:bogota:private": "node --experimental-strip-types scripts/check-internal-bogota.mjs",
+    "prebuild:apk:bogota": "npm run check:private-data && npm run check:bogota:private && npm run typecheck",
+    "build:apk:bogota": "npx eas-cli@latest build --platform android --profile bogota-internal"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
