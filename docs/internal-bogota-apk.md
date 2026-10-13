@@ -53,15 +53,18 @@ El overlay contiene **solo** catálogo normalizado, programación privada, reemp
 Antes de hacer una compilación real:
 1. Entrar a las opciones del proyecto en Expo y **desactivar «Unauthenticated access to internal builds»**; verificar con una cuenta no autorizada que el enlace no se abre sin autenticación.
 2. Obtener el consentimiento del responsable del proyecto para transferir esos dos JSON a EAS. La declaración CC BY-SA del catálogo general no es una confirmación individual de la revisión de septiembre.
-3. Comprobar en EAS cuota de compilaciones y costos aplicables al plan antes de ejecutar. No suponer gratuidad.
-4. Solo entonces, desde el clon **privado**:
+3. En Expo **Billing → Current Plan / Usage**, comprobar que la cuenta está en **Free (US$0)** y conserva **al menos una compilación Android** de las 15 gratuitas mensuales. La página [Expo pricing](https://expo.dev/pricing) y [FAQ de facturación](https://docs.expo.dev/billing/faq/) explican que la cuenta Free no incurre en cargos por excedentes; al agotarse la cuota, se bloquea la siguiente compilación hasta el reinicio de periodo. **NO actualizar a Starter ni comprar créditos.**
+4. Confirmar manualmente las tres comprobaciones anteriores (Free, cuota, acceso interno autenticado) y **autorizar por separado** la transferencia de los JSON derivados. Solo entonces, desde el clon **privado**:
 
 ```powershell
+$env:RUTA_EXPO_FREE_PLAN_CONFIRMED = "YES"
+$env:RUTA_EXPO_QUOTA_CONFIRMED = "YES"
+$env:RUTA_EXPO_PRIVATE_BUILDS_CONFIRMED = "YES"
 $env:RUTA_PRIVATE_EAS_UPLOAD_APPROVED = "YES"
 npm run build:apk:bogota
 ```
 
-`prebuild:apk:bogota` exige la variable anterior, comprueba que no haya datos privados en el índice Git, verifica el catálogo real y TypeScript. El perfil `bogota-internal` genera una APK para distribución interna; **no** ejecuta EAS Submit ni Google Play. La primera ejecución puede solicitar inicio de sesión o credenciales de firma. **No colocar un token Expo en el código o en este chat.**
+`prebuild:apk:bogota` **rechaza** una o varias declaraciones ausentes, comprueba que no haya datos privados en el índice Git, verifica el catálogo real y ejecuta TypeScript. Son declaraciones manuales: el script **no puede leer Billing ni Settings** de Expo para verificar que sean ciertas. El perfil `bogota-internal` genera una APK interna; **no** ejecuta EAS Submit ni Google Play. La primera ejecución puede solicitar inicio de sesión o credenciales de firma. **No colocar un token Expo en el código o en este chat.**
 
 Una vez terminada la compilación, abrir el resultado desde la cuenta Expo autorizada y descargar la APK **solo al dispositivo propio**. Los binarios suelen poder instalarse abriendo la descarga en Android y autorizando la instalación del archivo desde esa fuente cuando el sistema lo solicite. No reenviar el enlace ni añadirlo a un issue o release público.
 
