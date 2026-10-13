@@ -74,6 +74,8 @@ jobs:
         run: npm run test:map-offline
       - name: No extender mapa de variante corta
         run: npm run test:map-stop-visibility
+      - name: Protección de costo cero y privacidad EAS
+        run: npm run test:eas-private-consent
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo
