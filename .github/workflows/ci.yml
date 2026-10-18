@@ -76,6 +76,8 @@ jobs:
         run: npm run test:map-stop-visibility
       - name: Protección de costo cero y privacidad EAS
         run: npm run test:eas-private-consent
+      - name: Límite entre formulario y motor temporal
+        run: npm run test:scheduled-query
       - name: TypeScript
         run: npm run typecheck
       - name: Compatibilidad con Expo

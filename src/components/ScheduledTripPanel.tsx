@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import type { ScheduledCandidate, ScheduledCatalog, ScheduledResult } from '../gtfs/scheduled';
 import { findScheduledDirectTrips } from '../gtfs/scheduled';
-import { toGtfsServiceDate } from '../planner/service-date';
-import { toGtfsDepartureTime } from '../planner/service-time';
+import { prepareScheduledQuery } from '../planner/scheduled-query';
 import { buildScheduledSteps } from '../planner/itinerary-steps';
 import type { TransitDataset } from '../data/contract';
 
 interface Props {
   schedule: ScheduledCatalog | null;
-  catalog: Pick<TransitDataset, 'stops'>;
+  catalog: Pick<TransitDataset, 'stops' | 'datasetVersion'>;
   isSynthetic: boolean;
   originStopId: string | null;
   destinationStopId: string | null;
@@ -43,20 +42,21 @@ export function ScheduledTripPanel({
   departureText, onChangeDepartureText, selectedTripId, onSelectCandidate, stopName,
 }: Props) {
   const [result, setResult] = useState<ScheduledResult | null>(null);
-  const date = toGtfsServiceDate(dateText);
-  const departure = toGtfsDepartureTime(departureText);
-  const ready = schedule !== null && originStopId !== null &&
-    destinationStopId !== null && date !== null && departure !== null;
+  const preparation = prepareScheduledQuery({
+    dataset: catalog,
+    schedule,
+    originStopId,
+    destinationStopId,
+    dateText,
+    departureText,
+  });
+  const { date, departure } = preparation;
+  const ready = preparation.status === 'ready';
 
   const search = () => {
-    if (!ready || !date || !schedule || !originStopId || !destinationStopId) return;
+    if (preparation.status !== 'ready' || !schedule) return;
     onSelectCandidate(null);
-    setResult(findScheduledDirectTrips(schedule, {
-      serviceDate: date,
-      originStopId,
-      destinationStopId,
-      ...(departure ? { departureAtOrAfter: departure } : {}),
-    }));
+    setResult(findScheduledDirectTrips(schedule, preparation.query));
   };
 
   return (
@@ -125,6 +125,11 @@ export function ScheduledTripPanel({
       {schedule === null && (
         <Text style={styles.message}>No existe un calendario compatible con el catálogo seleccionado.</Text>
       )}
+      {preparation.status === 'catalog-mismatch' && (
+        <Text style={styles.error}>
+          El calendario no corresponde a esta versión de los datos. No es seguro recomendar viajes.
+        </Text>
+      )}
 
       {result?.status === 'ok' && (
         <View style={styles.result} accessibilityLiveRegion="polite">
@@ -189,7 +194,7 @@ export function ScheduledTripPanel({
           {statusMessages[result.status]}
         </Text>
       )}
-      {result === null && schedule !== null && date !== null && (
+      {result === null && ready && (
         <Text style={styles.message}>
           Selecciona origen y destino; luego consulta una fecha cubierta por el catálogo.
         </Text>

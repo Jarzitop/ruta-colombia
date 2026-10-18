@@ -40,7 +40,8 @@
     "test:provenance": "node --experimental-strip-types scripts/test-provenance.mjs",
     "test:map-offline": "node --experimental-strip-types scripts/test-map-offline.mjs",
     "test:map-stop-visibility": "node --experimental-strip-types scripts/test-map-stop-visibility.mjs",
-    "test:eas-private-consent": "node scripts/test-eas-private-consent.mjs"
+    "test:eas-private-consent": "node scripts/test-eas-private-consent.mjs",
+    "test:scheduled-query": "node --experimental-strip-types scripts/test-scheduled-query.mjs"
   },
   "dependencies": {
     "@maplibre/maplibre-react-native": "11.5.0",
