@@ -1,5 +1,5 @@
 import type { TransitDataset } from './contract';
-import { dataAttribution } from './licensing';
+import { dataAttribution } from './licensing.ts';
 
 type CatalogHeader = Pick<TransitDataset, 'publishable' | 'datasetVersion' | 'sourceRefs'>;
 

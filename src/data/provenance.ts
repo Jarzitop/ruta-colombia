@@ -1,6 +1,6 @@
 import type { TransitDataset } from './contract';
 import type { ScheduledCatalog } from '../gtfs/scheduled';
-import { dataAttribution } from './licensing';
+import { dataAttribution } from './licensing.ts';
 
 export function catalogProvenance(
   dataset: Pick<TransitDataset,'datasetVersion'|'sourceRefs'|'publishable'>,
