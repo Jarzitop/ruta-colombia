@@ -19,6 +19,18 @@ const cases = [
     assert.match(result.title, /NO APTOS PARA VIAJAR/);
     assert.doesNotMatch(result.mapTitle, /ficticias/);
   }],
+  ['GTFS oficial de TransMilenio mantiene aviso de revisión sin alegar falta de licencia', () => {
+    const result = describeCatalog({
+      publishable: false, datasetVersion: 'bogota-pilot-gtfs-20260929',
+      sourceRefs: [{
+        kind:'official',publisher:'TransMilenio S.A.',title:'Revisión GTFS de prueba',
+      }],
+    });
+    assert.equal(result.status,'review');
+    assert.match(result.description,/Licencia de los datos confirmada/);
+    assert.match(result.description,/vigencia/);
+    assert.doesNotMatch(result.description,/permisos de uso/);
+  }],
   ['un catálogo publicable anuncia solo cobertura limitada', () => {
     const result = describeCatalog({
       publishable: true, datasetVersion: 'metadata-test-only',

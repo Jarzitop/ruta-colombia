@@ -1,5 +1,6 @@
 import type { TransitDataset } from './contract';
 import type { ScheduledCatalog } from '../gtfs/scheduled';
+import { dataAttribution } from './licensing';
 
 export function catalogProvenance(
   dataset: Pick<TransitDataset,'datasetVersion'|'sourceRefs'|'publishable'>,
@@ -13,8 +14,12 @@ export function catalogProvenance(
   const period = schedule?.feedInfo?.feed_start_date && schedule.feedInfo.feed_end_date
     ? ` · periodo declarado ${schedule.feedInfo.feed_start_date}–${schedule.feedInfo.feed_end_date}`
     : '';
-  return `Fuente: ${publisher} · ${title}${period}. ` +
+  const confirmed = dataAttribution(dataset);
+  const rights = confirmed ? ' Datos GTFS: CC BY-SA 4.0 confirmada.' : '';
+  return `Fuente: ${publisher} · ${title}${period}.` + rights + ' ' +
     (dataset.publishable
       ? 'Cobertura limitada al catálogo.'
-      : 'Revisión interna; licencia y actualidad sujetas a confirmación.');
+      : confirmed
+        ? 'Ensayo interno: actualidad de los horarios y recorridos sin verificar.'
+        : 'Revisión interna: licencia y actualidad sujetas a confirmación.');
 }

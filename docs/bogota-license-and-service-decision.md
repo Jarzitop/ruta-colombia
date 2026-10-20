@@ -1,36 +1,35 @@
-# Bogotá pilot-001 — licencia, vigencia y decisión de pruebas (08/10/2026)
+# Bogotá piloto: licencia GTFS, vigencia y estado de publicación
 
-**Estado:** revisión documental aportada por «01 — Dirección y datos». Este documento registra lo que la revisión sostiene; **no equivale a una autorización escrita de TransMilenio ni a asesoría jurídica**. Fuente recibida: `Ruta_Colombia_revision_datos_Bogota_2026-10-08(1).md`. No se incluyen archivos de operación GTFS en este repositorio público.
+**Actualizado el 20/10/2026:** TRANSMILENIO S.A. respondió por escrito a la petición del equipo, en un oficio de octubre de 2026 firmado por el director de Tecnologías de la Información y Comunicaciones. El documento completo, con datos personales del solicitante, se guarda fuera de GitHub público. Este registro es una síntesis de sus seis respuestas; no publica el PDF ni lo confunde con un certificado de actualidad operativa.
 
-## Evidencia y niveles de certeza
+## Confirmación institucional — asunto de licencia resuelto
 
-- **Documentado por el equipo de datos:** el [catálogo distrital GTFS SITP](https://datosabiertos.bogota.gov.co/dataset/especificacion-gtfs-general-transport-feed-specification-sitp) y su [recurso ZIP](https://datosabiertos.bogota.gov.co/dataset/especificacion-gtfs-general-transport-feed-specification-sitp/resource/0885fac9-a7bb-490f-abe8-ddee3bbe9cf2) declaran CC BY-SA 4.0; su [API CKAN](https://datosabiertos.bogota.gov.co/api/3/action/package_show?id=especificacion-gtfs-general-transport-feed-specification-sitp) devuelve el identificador de licencia.
-- **Trazabilidad documental reportada:** el recurso lleva a la colección GTFS de TRANSMILENIO S.A.; el [ítem de 29/09/2026](https://datosabiertos-transmilenio.hub.arcgis.com/content/8f56b486d8044e698ad82e7e7bd4cbff) enlaza a la revisión. Su [ficha ArcGIS](https://www.arcgis.com/sharing/rest/content/items/8f56b486d8044e698ad82e7e7bd4cbff?f=json) muestra `licenseInfo: null` y el ZIP no trae archivo LICENSE. No significa revocación ni prueba de prohibición.
-- **Inferencia razonable, todavía no confirmada:** CC BY-SA 4.0 probablemente cubra la revisión publicada por esa cadena documental. Debemos confirmar su alcance en la revisión concreta, sus eventuales exclusiones y su relación con los términos generales de TransMilenio antes de distribuir datos o APK a terceros.
-- **Consulta pendiente (no enviada):** al contacto indicado en `feed_info.txt` solicitar alcance de licencia, condiciones de atribución, vigencia de esta entrega, variantes que comparten `shape_id` y naturaleza de los tiempos interpolados. El borrador está en el informe original; **no se ha enviado ninguna comunicación**.
+1. **Alcance.** TRANSMILENIO S.A. expresa que **CC BY-SA 4.0 se extiende a todos los conjuntos ZIP GTFS actuales y futuros** ofrecidos en su portal. La revisión del 29/09/2026 pertenece a la clase de entregas cuya licencia fue consultada. El campo técnico `licenseInfo:null` de ArcGIS no debe interpretarse ahora como una exclusión de esa declaración escrita.
+2. **Derechos de reutilización.** La carta indica expresamente que la licencia permite extraer, compilar, transformar, adaptar, compartir y redistribuir los datos, **también comercialmente**. La pregunta que respondió mencionaba específicamente archivo independiente, APK Android, uso sin conexión y eventual publicación en Google Play. Se aplican las condiciones generales de CC BY-SA 4.0.
+3. **Obligaciones.** Atribuir al titular de los datos, proporcionar enlace a la licencia, señalar las modificaciones y licenciar las **adaptaciones de los datos** compartidas bajo CC BY-SA 4.0 o licencia compatible. **No asumir** que por ello todo el código independiente de Ruta Colombia debe publicarse bajo la misma licencia. Antes de la distribución pública definir cómo se entregará la base derivada con aviso de licencia apropiado.
+4. **Texto de atribución.** En la consulta se propuso un reconocimiento que diferenciaba el GTFS, la selección/normalización y la ausencia de aval oficial. TRANSMILENIO ratificó la obligación de atribuir y anunció que revisaría la mejor forma de señalar sus licencias. **No afirmó literalmente la aprobación final de cada palabra** del modelo de créditos propuesto.
+5. **Portal y terceros.** La entidad reiteró la aplicación de CC BY-SA a los conjuntos de su portal de datos abiertos. Esta respuesta **no licencia** por defecto datos de terceros ni de otras ciudades.
 
-Si se confirma CC BY-SA 4.0: atribuir, enlazar a la fuente y licencia, indicar transformaciones, conservar avisos y cumplir CompartirIgual cuando corresponda a adaptaciones compartidas; no inferir que toda la app debe tener la misma licencia. Evaluar de forma separada código, GTFS original y base transformada.
+Fuentes abiertas de referencia: [catálogo distrital GTFS](https://datosabiertos.bogota.gov.co/dataset/especificacion-gtfs-general-transport-feed-specification-sitp), [revisión publicada 29/09/2026](https://datosabiertos-transmilenio.hub.arcgis.com/content/8f56b486d8044e698ad82e7e7bd4cbff), [resumen de CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) y [texto legal](https://creativecommons.org/licenses/by-sa/4.0/legalcode.es).
 
-## Vigencia y precisión
+## Asuntos técnicos que NO quedaron acreditados por la respuesta
 
-- La revisión declara `feed_start_date=20260101`, `feed_end_date=20261231` y `feed_version=1`. Son límites de programación del feed, **no una garantía de que sigue actualizado**. Fecha de publicación, fecha de revisión y fechas de servicio son conceptos diferentes.
-- Los **9.773 eventos** del piloto tienen `timepoint=0`; la salida/llegada es **aproximada o interpolada**. No conocemos el error ni un margen ± minutos. Mostrar «Salida programada aproximada» y «No es información en tiempo real»; no mostrar cuenta regresiva ni ETA exacta.
-- Las 709 entradas son **viajes programados en el feed, no vehículos observados**. El día 12/10/2026 aparecen 150 viajes de 14 paradas y 153 de 13; ambos comparten `service_id=4`. No se puede atribuir una variante a una hora de corte única.
-- La variante de 14 paradas termina en Universidades; la de 13 termina en Centro Memoria. Ambas referencian `shape_id=11231`. La línea completa no debe dibujarse como si la corta llegara a Universidades. Sin recorte de geometría documentado, mostrar solo paradas incluidas.
-- Respetar `America/Bogota`, calendario/excepciones, secuencia y permisos, y los valores GTFS de tiempo mayores de 24 horas sin cambiar arbitrariamente su fecha de servicio.
-- Fuera de la cobertura de una muestra o vigencia **no afirmar que no existe la ruta**. Si se recibe una revisión nueva que invalida los horarios, el horizonte anual no permite seguir recomendándolos.
+- **Actualidad.** Al preguntar si el intervalo GTFS 01/01–31/12/2026 describe una vigencia operativa real o un horizonte nominal, la respuesta **solo remitió al portal oficial de datos abiertos**. No confirmó que el ZIP 29/09/2026 siga siendo la revisión más reciente ni que los viajes sigan operando hoy.
+- **Exactitud horaria.** La pregunta indicó que los 9.773 eventos del piloto tienen `timepoint=0`. La entidad **no documentó precisión, interpolación ni margen de error**. Por interpretación del estándar GTFS se conservan **horas programadas aproximadas**, nunca ETA ni tiempo real.
+- **Variantes.** La respuesta atribuye diferencias de trazado al día de operación y a la ciclovía dominical. **No explica cómo distinguir exactamente los 150 viajes largos y 153 cortos que aparecen bajo el mismo `service_id=4` para 12/10/2026**. No inventar cortes horarios ni una regla de día que reemplace `trip_id → patternId`.
+- **Geometría.** Ambas variantes documentadas comparten `shape_id=11231`; sigue prohibido dibujar la continuación de la variante corta a Universidades. La variante de 13 paradas termina en Centro Memoria; la de 14 en Universidades.
+- **Cobertura.** Son 709 viajes de un subconjunto, no evidencia de que todos los buses o rutas estén representados. «Sin viaje compatible» no equivale a «no existe el servicio».
 
-Fuentes técnicas: [GTFS Schedule Reference](https://gtfs.org/documentation/schedule/reference/) y [texto legal CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/legalcode.es).
+## Decisión de ingeniería y publicación
 
-## Decisión de desarrollo y distribución
+| Contexto | Política posterior al oficio |
+| --- | --- |
+| Código en GitHub público | Sí; publicar fuentes de código, módulos, pruebas ficticias y **esta síntesis sin datos personales**. La licencia GTFS ya no es el motivo para ocultar código. |
+| Datos de desarrollo privados | Continuar con `publishable:false` hasta verificar vigencia y rutas. Mantener el overlay del piloto fuera del repo por decisión operativa y para evitar una distribución prematura, no porque la licencia prohíba compartirlo. |
+| APK interna | Permitida por CC BY-SA 4.0 con créditos/condiciones correspondientes; mantener controles de acceso del build EAS y verificar costo cero. Distribución interna no exime de atribución ni CompartirIgual cuando correspondan. |
+| APK a terceros / Google Play | **La licencia de los datos ya no es el bloqueo principal.** Antes de lanzar: revisión reciente de versión GTFS, atribución accesible, licencia de la base derivada, actualización de datos, revisión de avisos y ensayos físicos Android. |
+| Otras ciudades | Verificar fuente, vigencia y licencia **independientemente**; no transferir esta confirmación a Tunja. |
 
-| Entorno | Decisión actual |
-|---|---|
-| GitHub público | **NO** agregar ZIP, CSV, `temporal.json` ni derivados operativos del piloto mientras haya incertidumbre de licencia. Publicar solo código y fixtures explícitamente sintéticos. |
-| Interfaz sintética + CI | **Sí**: seguir implementando y verificando fechas, variantes, instrucciones y mapa offline sin necesidad de permiso sobre el GTFS real. |
-| APK interna de ensayo en **dispositivos propios del equipo** | **Posible, condicional**, según la recomendación del chat de datos; mantener `publishable:false`, atribución, avisos y control de acceso. No implica exención de licencia. Requiere decidir explícitamente el momento y usar un proceso de compilación que **no suba el ZIP a GitHub público**. |
-| APK a terceros, Play Store, datos abiertos propios | **Esperar** confirmación suficiente de licencia/alcance, atribución, vigencia y validación técnica/presencial. |
+La app muestra «Datos originales: TransMilenio» y enlace a fuente y licencia con aviso de transformación e independencia, manteniendo «DATOS EN REVISIÓN — NO APTOS PARA VIAJAR» cuando `publishable:false`.
 
-**Pendientes técnicos**: conectar `src/gtfs/scheduled.ts` al flujo por fecha con fixtures sintéticos; mantener la selección del catálogo local sin internet; probar gestos MapLibre/arranque en modo avión en Android real; verificar que la variante corta no dibuje geometría del patrón largo; preparar configuración de datos reales de desarrollo aislada de GitHub y de workflows públicos solo si hace falta para ensayo interno.
-
-Documentos relacionados: [auditoría técnica](bogota-private-audit-review.md), [handoff](bogota-pilot-handoff.md), [matriz Android](testing-android.md), [issue #14](https://github.com/Jarzitop/ruta-colombia/issues/14).
+Relacionados: [instrucciones de APK privada](internal-bogota-apk.md), [auditoría previa](bogota-private-audit-review.md), [pruebas Android](testing-android.md), [issue #14](https://github.com/Jarzitop/ruta-colombia/issues/14).

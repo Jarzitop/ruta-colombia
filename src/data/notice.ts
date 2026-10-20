@@ -1,4 +1,5 @@
 import type { TransitDataset } from './contract';
+import { dataAttribution } from './licensing';
 
 type CatalogHeader = Pick<TransitDataset, 'publishable' | 'datasetVersion' | 'sourceRefs'>;
 
@@ -24,7 +25,9 @@ export function describeCatalog(dataset: CatalogHeader): CatalogNotice {
     return {
       status: 'review',
       title: 'DATOS EN REVISIÓN — NO APTOS PARA VIAJAR',
-      description: `Catálogo ${version}. Recorridos pendientes de validación y permisos de uso.`,
+      description: dataAttribution(dataset)
+        ? `Catálogo ${version}. Licencia de los datos confirmada; horarios, vigencia y recorridos pendientes de verificación en campo.`
+        : `Catálogo ${version}. Recorridos pendientes de validación y permisos de uso.`,
       mapTitle: 'Esquema local de paradas del catálogo en revisión',
     };
   }

@@ -19,7 +19,7 @@ El límite `src/planner/scheduled-query.ts` garantiza que la versión del catál
 
 ## Próximos incrementos, en orden
 
-1. **Prueba de integración privada reproducible**: con clon local, overlay del GTFS y pruebas de ambas variantes, fecha fuera del feed y hora de abordaje. No subir assets privados a GitHub. Obtener la respuesta de TransMilenio y confirmar términos aplicables.
+1. **Prueba de integración privada reproducible**: con clon local, overlay del GTFS y pruebas de ambas variantes, fecha fuera del feed y hora de abordaje. No subir assets privados a GitHub. La respuesta de TRANSMILENIO S.A. recibida en octubre de 2026 confirmó CC BY-SA 4.0 para ZIP GTFS actuales y futuros; aplicar atribución y CompartirIgual a la base derivada.
 2. **Segunda APK sin sobrecosto y acceso restringido**: verificar plan Expo Free, cuota Android y autenticación de enlaces antes de autorizar transferencia de JSON a EAS; opción de build local si no se dan estas condiciones.
 3. **Regresión física Android**: pantalla pequeña, selección, MapLibre, fallos de carga y arranque en modo avión. Separar errores del motor de los de renderizado.
 4. **Refactorización por evidencia**: separar la UI de `App.tsx` en componentes si el test físico muestra fricciones; precalcular/indexar catálogo temporal solo si las consultas reales presentan latencia medible. No introducir backend, Redux ni otra ciudad por anticipación.

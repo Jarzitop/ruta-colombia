@@ -1,10 +1,10 @@
 # Segunda APK — Bogotá real, solo ensayo interno
 
-**Estado técnico (8 de octubre de 2026):** preparar una compilación local de trabajo con datos reales auditados, **no publicables**. Este procedimiento NO sube el GTFS original ni las muestras derivadas a GitHub público. La app no está verificada aún en Android con esta versión.
+**Estado técnico (20 de octubre de 2026):** preparar una compilación local de trabajo con datos reales auditados, **no publicables como producto listo para viajar**, pese a que CC BY-SA 4.0 sí permite su redistribución bajo condiciones. Este procedimiento NO sube el GTFS original ni las muestras derivadas a GitHub público. La app no está verificada aún en Android con esta versión.
 
 ## Datos y límites
 
-Fuente: GTFS TRANSMILENIO S.A. revisión 29/09/2026, únicamente el piloto de una ruta. `datasetVersion: bogota-pilot-001-gtfs-20260929-audit-20261007`. Los datos se mantienen `publishable: false`.
+Fuente: GTFS TRANSMILENIO S.A. revisión 29/09/2026, únicamente el piloto de una ruta. Licencia de los datos **CC BY-SA 4.0 confirmada mediante respuesta institucional de octubre de 2026**; atribuir, indicar modificaciones y cumplir CompartirIgual para adaptaciones distribuidas. `datasetVersion: bogota-pilot-001-gtfs-20260929-audit-20261007`. Los datos se mantienen `publishable: false`.
 
 `temporal.json` aporta 709 viajes y 9.773 eventos de parada, con dos patrones que tienen **14 y 13 paradas**. La variante de 13 termina en **Centro Memoria**, la de 14 en **Universidades**. Ambos se deben buscar por `tripId + serviceId + patternId + fecha/hora`; **no** usar búsqueda atemporal en una muestra real. El paquete aporta 16 casos de regresión del calendario, festivos y variantes. Todos sus `timepoint=0` son **aproximados**, no una estimación de llegada actual. La vigencia declarada del feed (2026-01-01 a 2026-12-31) no certifica actualidad de la versión recibida.
 
@@ -52,7 +52,7 @@ El overlay contiene **solo** catálogo normalizado, programación privada, reemp
 
 Antes de hacer una compilación real:
 1. Entrar a las opciones del proyecto en Expo y **desactivar «Unauthenticated access to internal builds»**; verificar con una cuenta no autorizada que el enlace no se abre sin autenticación.
-2. Obtener el consentimiento del responsable del proyecto para transferir esos dos JSON a EAS. La declaración CC BY-SA del catálogo general no es una confirmación individual de la revisión de septiembre.
+2. Obtener consentimiento del responsable del proyecto para **transferir los dos JSON a servidores Expo EAS**, decisión de privacidad/custodia independiente de la licencia. El oficio de TRANSMILENIO S.A. de octubre de 2026 confirmó **CC BY-SA 4.0 para ZIP GTFS actuales y futuros**, incluyendo el tipo de entrega usado; no se necesita otra autorización especial para reutilizar estos datos respetando la licencia. No subir el PDF de respuesta (contiene datos personales).
 3. En Expo **Billing → Current Plan / Usage**, comprobar que la cuenta está en **Free (US$0)** y conserva **al menos una compilación Android** de las 15 gratuitas mensuales. La página [Expo pricing](https://expo.dev/pricing) y [FAQ de facturación](https://docs.expo.dev/billing/faq/) explican que la cuenta Free no incurre en cargos por excedentes; al agotarse la cuota, se bloquea la siguiente compilación hasta el reinicio de periodo. **NO actualizar a Starter ni comprar créditos.**
 4. Confirmar manualmente las tres comprobaciones anteriores (Free, cuota, acceso interno autenticado) y **autorizar por separado** la transferencia de los JSON derivados. Solo entonces, desde el clon **privado**:
 

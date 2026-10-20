@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { activeDataset, activeScheduledCatalog } from './src/data/active';
 import { describeCatalog } from './src/data/notice';
 import { catalogProvenance } from './src/data/provenance';
+import { DataCredits } from './src/components/DataCredits';
 import { CatalogPicker, type CatalogOption } from './src/components/CatalogPicker';
 import { ScheduledTripPanel } from './src/components/ScheduledTripPanel';
 import type { ScheduledCandidate } from './src/gtfs/scheduled';
@@ -144,6 +145,7 @@ export default function App() {
         {provenance && (
           <Text style={styles.provenanceText}>{provenance}</Text>
         )}
+        <DataCredits dataset={dataset} />
         <View style={styles.modeRow}>
           <Pressable
             style={[styles.modeButton, !scheduleMode && styles.modeActive, !isSyntheticCatalog && styles.disabled]}
